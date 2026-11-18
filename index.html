@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PromoAI - Auto Product Video Generator (Multi-Image & 1-Click)</title>
+  <title>PromoAI - Auto Product Video Generator (1-Click)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
@@ -52,7 +52,7 @@
         </div>
         <div>
           <h1 class="font-bold text-lg tracking-tight text-white leading-none">PromoAI <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 ml-1">PRO</span></h1>
-          <p class="text-[11px] text-slate-400 mt-0.5">Multi-Image Slide & Vertical Video Generator</p>
+          <p class="text-[11px] text-slate-400 mt-0.5">1-Click E-Commerce Link to Vertical Video & AI Voice Over</p>
         </div>
       </div>
       <div class="flex items-center gap-3">
@@ -96,7 +96,7 @@
           </button>
         </div>
 
-        <!-- Preset Produk Cepat -->
+        <!-- Preset Produk Cepat (Terintegrasi) -->
         <div class="mt-4 p-3.5 bg-slate-900/90 rounded-xl border border-slate-800">
           <p class="text-xs text-slate-400 mb-2.5 font-semibold flex items-center gap-1.5">
             <span>🎯</span> Isi Data Produk Cepat (1x Klik Preset Akurat):
@@ -118,89 +118,45 @@
         </div>
       </section>
 
-      <!-- Step 2: Data Produk & Multi-Image Gallery -->
+      <!-- Step 2: Detail Produk (Bisa Diedit Manual Kapan Saja) -->
       <section class="glass-panel rounded-2xl p-5 sm:p-6 space-y-4">
         <div class="flex items-center justify-between">
           <h2 class="text-base font-bold text-white flex items-center gap-2">
             <span class="w-6 h-6 rounded-full bg-indigo-600 text-xs flex items-center justify-center font-bold">2</span>
-            Galeri Multi-Gambar & Detail Produk
+            Detail Produk & Visual
           </h2>
-          <span id="imageCountBadge" class="text-xs px-2.5 py-1 rounded-md bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-semibold">1 Gambar Aktif</span>
+          <span class="text-xs text-slate-400">Otomatis update ke video</span>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-start">
-          <!-- Kolom Kiri: Preview & Multi-Image Manager -->
-          <div class="md:col-span-5 flex flex-col items-center bg-slate-900/90 p-3.5 rounded-xl border border-slate-800 space-y-3">
-            <!-- Preview Utama -->
-            <div class="relative w-full aspect-square rounded-xl overflow-hidden bg-slate-950 border border-slate-700">
-              <img
-                id="thumbPreview"
-                src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80"
-                alt="Preview Produk"
-                class="w-full h-full object-cover"
-              />
-              <span id="thumbBadge" class="absolute top-2.5 left-2.5 bg-red-600 text-white text-[11px] font-extrabold px-2.5 py-1 rounded-lg shadow">
-                DISKON 58%
-              </span>
-            </div>
-
-            <!-- Tombol Multi-Upload -->
-            <input
-              type="file"
-              id="multiImageInput"
-              accept="image/*"
-              multiple
-              class="hidden"
-              onchange="handleMultiImageUpload(event)"
-            />
-            <button
-              type="button"
-              onclick="document.getElementById('multiImageInput').click()"
-              class="w-full py-2.5 px-3 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl transition flex items-center justify-center gap-2 shadow-md cursor-pointer"
-            >
-              <span>📁 Upload Banyak Gambar Sekaligus</span>
-            </button>
-
-            <!-- Thumbnail Slider / Grid Selector -->
-            <div id="thumbnailContainer" class="w-full flex gap-2 overflow-x-auto pb-1 min-h-[55px] items-center">
-              <!-- Thumbnail item akan dimasukkan via JS -->
-            </div>
-            <p class="text-[10px] text-slate-400 text-center">
-              Klik salah satu gambar thumbnail di atas untuk menjadikannya sorotan utama video.
-            </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-semibold text-slate-400 mb-1.5">Nama Produk</label>
+            <input type="text" id="productTitle" value="Serum Niacinamide 10% Glowing Booster" oninput="syncAndGenerateScript()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500" />
           </div>
 
-          <!-- Kolom Kanan: Form Detail Produk -->
-          <div class="md:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-            <div class="sm:col-span-2">
-              <label class="block text-xs font-semibold text-slate-400 mb-1">Nama Produk</label>
-              <input type="text" id="productTitle" value="Serum Niacinamide 10% Glowing Booster" oninput="syncAndGenerateScript()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500" />
-            </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1.5">Harga Coret (Asli)</label>
+            <input type="text" id="originalPrice" value="Rp 189.000" oninput="syncAndGenerateScript()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-300 focus:outline-none focus:border-indigo-500" />
+          </div>
 
-            <div>
-              <label class="block text-xs font-semibold text-slate-400 mb-1">Harga Coret (Normal)</label>
-              <input type="text" id="originalPrice" value="Rp 189.000" oninput="syncAndGenerateScript()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-300 focus:outline-none focus:border-indigo-500" />
-            </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1.5">Harga Promo</label>
+            <input type="text" id="promoPrice" value="Rp 79.000" oninput="syncAndGenerateScript()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm font-bold text-emerald-400 focus:outline-none focus:border-indigo-500" />
+          </div>
 
-            <div>
-              <label class="block text-xs font-semibold text-slate-400 mb-1">Harga Promo</label>
-              <input type="text" id="promoPrice" value="Rp 79.000" oninput="syncAndGenerateScript()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm font-bold text-emerald-400 focus:outline-none focus:border-indigo-500" />
-            </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1.5">Badge Promo</label>
+            <input type="text" id="discountBadge" value="DISKON 58%" oninput="renderSingleFrame()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-amber-400 font-semibold focus:outline-none focus:border-indigo-500" />
+          </div>
 
-            <div>
-              <label class="block text-xs font-semibold text-slate-400 mb-1">Badge Diskon</label>
-              <input type="text" id="discountBadge" value="DISKON 58%" oninput="updateBadgeAndFrame()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-amber-400 font-semibold focus:outline-none focus:border-indigo-500" />
-            </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1.5">URL Gambar Produk</label>
+            <input type="url" id="productImage" value="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80" oninput="loadProductImage(this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-300 focus:outline-none focus:border-indigo-500" />
+          </div>
 
-            <div>
-              <label class="block text-xs font-semibold text-slate-400 mb-1">URL Gambar Utama</label>
-              <input type="url" id="productImage" value="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80" oninput="loadMainImageUrl(this.value)" placeholder="https://..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-300 focus:outline-none focus:border-indigo-500" />
-            </div>
-
-            <div class="sm:col-span-2">
-              <label class="block text-xs font-semibold text-slate-400 mb-1">Keunggulan Utama Produk (USP)</label>
-              <textarea id="productBenefit" rows="2" oninput="syncAndGenerateScript()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">Mencerahkan wajah kusam dalam 7 hari, melembapkan kulit, dan aman untuk semua jenis kulit.</textarea>
-            </div>
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-semibold text-slate-400 mb-1.5">Keunggulan Utama Produk (USP)</label>
+            <textarea id="productBenefit" rows="2" oninput="syncAndGenerateScript()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">Mencerahkan wajah kusam dalam 7 hari, melembapkan kulit, dan aman untuk semua jenis kulit.</textarea>
           </div>
         </div>
       </section>
@@ -248,7 +204,7 @@
     <div class="lg:col-span-5 flex flex-col items-center">
       <div class="sticky top-22 w-full flex flex-col items-center">
         <div class="flex items-center justify-between w-full max-w-[320px] mb-3">
-          <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Live Studio 9:16 (Multi-Image Rotator)</span>
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Live Studio 9:16</span>
           <span id="renderStatus" class="text-xs font-semibold text-indigo-400">Siap Diputar</span>
         </div>
 
@@ -268,10 +224,10 @@
             </button>
           </div>
           <button type="button" id="exportBtn" onclick="exportWebMVideo()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-3 px-4 rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50 cursor-pointer">
-            <span>⬇ Download Video (.WebM)</span>
+            <span>⬇ Download Video (.mp4)</span>
           </button>
           <p class="text-[11px] text-center text-slate-500">
-            Video akan otomatis merotasi semua gambar yang Anda unggah secara bergantian!
+            Gunakan Google Chrome untuk hasil suara Bahasa Indonesia & ekspor video terbaik.
           </p>
         </div>
       </div>
@@ -281,13 +237,8 @@
 
   <script>
     // ==========================================
-    // 1. MULTI-IMAGE MANAGEMENT & PRESETS
+    // 1. DATABASE PRESET PRODUK SIAP PAKAI
     // ==========================================
-    let productImages = [
-      "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80"
-    ];
-    let activeImageIndex = 0;
-
     const productPresets = {
       skincare: {
         url: "https://shopee.co.id/Serum-Niacinamide-10-Glowing-Booster-i.123456",
@@ -295,11 +246,7 @@
         originalPrice: "Rp 189.000",
         promoPrice: "Rp 79.000",
         discount: "DISKON 58%",
-        images: [
-          "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1608248597359-f5383561141a?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=600&q=80"
-        ],
+        image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80",
         benefit: "Mencerahkan wajah kusam dalam 7 hari, melembapkan kulit, dan aman untuk semua jenis kulit."
       },
       gadget: {
@@ -308,11 +255,7 @@
         originalPrice: "Rp 450.000",
         promoPrice: "Rp 149.000",
         discount: "HEMAT 67%",
-        images: [
-          "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1572536147248-ac59a8abfa4b?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=600&q=80"
-        ],
+        image: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=600&q=80",
         benefit: "Suara bass menggelegar, baterai tahan hingga 30 jam, dan tahan percikan air IPX5."
       },
       fashion: {
@@ -321,11 +264,7 @@
         originalPrice: "Rp 399.000",
         promoPrice: "Rp 165.000",
         discount: "FLASH SALE",
-        images: [
-          "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=600&q=80"
-        ],
+        image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80",
         benefit: "Sol empuk anti slip, bahan sirkulasi udara sejuk di kaki, cocok untuk olahraga maupun hangout."
       },
       home: {
@@ -334,14 +273,12 @@
         originalPrice: "Rp 220.000",
         promoPrice: "Rp 85.000",
         discount: "PROMO HARI INI",
-        images: [
-          "https://images.unsplash.com/photo-1570222094114-d054a817e56b?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=600&q=80"
-        ],
+        image: "https://images.unsplash.com/photo-1570222094114-d054a817e56b?auto=format&fit=crop&w=600&q=80",
         benefit: "Bisa menghancurkan es batu dalam 10 detik, praktis dibawa ke kantor atau gym dengan cas USB."
       }
     };
 
+    // Fungsi Menerapkan Preset ke Form
     function applyPreset(category) {
       const data = productPresets[category];
       if (!data) return;
@@ -351,114 +288,15 @@
       document.getElementById('originalPrice').value = data.originalPrice;
       document.getElementById('promoPrice').value = data.promoPrice;
       document.getElementById('discountBadge').value = data.discount;
+      document.getElementById('productImage').value = data.image;
       document.getElementById('productBenefit').value = data.benefit;
 
-      productImages = [...data.images];
-      activeImageIndex = 0;
-      document.getElementById('productImage').value = productImages[0];
-
-      updateThumbnailsUI();
-      loadActiveImage();
+      loadProductImage(data.image);
       syncAndGenerateScript();
     }
 
-    function handleMultiImageUpload(event) {
-      const files = event.target.files;
-      if (!files || files.length === 0) return;
-
-      let loadedCount = 0;
-      const newImages = [];
-
-      Array.from(files).forEach((file) => {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          newImages.push(e.target.result);
-          loadedCount++;
-          if (loadedCount === files.length) {
-            productImages = [...newImages];
-            activeImageIndex = 0;
-            document.getElementById('productImage').value = "(Multi-Gambar Lokal Terunggah)";
-            updateThumbnailsUI();
-            loadActiveImage();
-          }
-        };
-        reader.readAsDataURL(file);
-      });
-    }
-
-    function updateThumbnailsUI() {
-      const container = document.getElementById('thumbnailContainer');
-      container.innerHTML = '';
-
-      document.getElementById('imageCountBadge').textContent = `${productImages.length} Gambar Aktif`;
-
-      productImages.forEach((imgSrc, idx) => {
-        const thumb = document.createElement('div');
-        thumb.className = `relative w-12 h-12 rounded-lg overflow-hidden border-2 cursor-pointer flex-shrink-0 transition ${idx === activeImageIndex ? 'border-pink-500 scale-105 shadow-md shadow-pink-500/30' : 'border-slate-700 opacity-70 hover:opacity-100'}`;
-        thumb.innerHTML = `<img src="${imgSrc}" class="w-full h-full object-cover">`;
-        thumb.onclick = () => {
-          activeImageIndex = idx;
-          document.getElementById('productImage').value = imgSrc;
-          updateThumbnailsUI();
-          loadActiveImage();
-        };
-        container.appendChild(thumb);
-      });
-    }
-
     // ==========================================
-    // 2. IMAGE LOADER & CANVAS STUDIO
-    // ==========================================
-    let loadedImagesObjects = [];
-    let isImagesReady = false;
-
-    function loadActiveImage() {
-      isImagesReady = false;
-      const activeSrc = productImages[activeImageIndex] || productImages[0];
-      document.getElementById('thumbPreview').src = activeSrc;
-
-      loadedImagesObjects = [];
-      let loadedCount = 0;
-
-      productImages.forEach((src, idx) => {
-        const img = new Image();
-        if (!src.startsWith('data:')) {
-          img.crossOrigin = "anonymous";
-        }
-        img.onload = () => {
-          loadedCount++;
-          if (loadedCount === productImages.length) {
-            isImagesReady = true;
-            if (!isPlaying) renderSingleFrame();
-          }
-        };
-        img.onerror = () => {
-          loadedCount++;
-          if (loadedCount === productImages.length) {
-            isImagesReady = true;
-            if (!isPlaying) renderSingleFrame();
-          }
-        };
-        img.src = src;
-        loadedImagesObjects.push(img);
-      });
-    }
-
-    function loadMainImageUrl(url) {
-      if (!url || url.includes("Lokal")) return;
-      productImages[activeImageIndex] = url;
-      updateThumbnailsUI();
-      loadActiveImage();
-    }
-
-    function updateBadgeAndFrame() {
-      const badgeVal = document.getElementById('discountBadge').value || 'PROMO';
-      document.getElementById('thumbBadge').textContent = badgeVal.toUpperCase();
-      if (!isPlaying) renderSingleFrame();
-    }
-
-    // ==========================================
-    // 3. COPYWRITING ENGINE (AIDA & PAS)
+    // 2. COPYWRITING ENGINE (AIDA & PAS)
     // ==========================================
     function syncAndGenerateScript() {
       const title = document.getElementById('productTitle').value.trim();
@@ -487,6 +325,7 @@
           cta = `Pesan sekarang dan rasakan langsung manfaatnya.`;
         }
       } else {
+        // Framework PAS (Problem - Agitate - Solution)
         if (tone === "genz") {
           hook = `Sering kesel sama masalah yang bikin aktivitasmu terganggu?`;
           body = `Tenang, ${title} solusinya! ${benefit} Lagi diskon gede dari ${origPrice} jadi cuma ${promoPrice}!`;
@@ -503,9 +342,12 @@
       }
 
       document.getElementById('voiceScript').value = `${hook} ${body} ${cta}`;
-      if (!isPlaying) renderSingleFrame();
+      renderSingleFrame();
     }
 
+    // ==========================================
+    // 3. SMART LINK PARSER & 1-CLICK ACTION
+    // ==========================================
     function handleOneClickGenerate() {
       const urlInput = document.getElementById('productUrl').value.trim();
       if (!urlInput) {
@@ -513,6 +355,7 @@
         return;
       }
 
+      // Cek apakah URL cocok dengan salah satu preset
       const lowerUrl = urlInput.toLowerCase();
       if (lowerUrl.includes("serum") || lowerUrl.includes("skincare")) {
         applyPreset('skincare');
@@ -523,6 +366,7 @@
       } else if (lowerUrl.includes("blender") || lowerUrl.includes("juicer")) {
         applyPreset('home');
       } else {
+        // Ekstrak slug nama produk dari URL e-commerce jika memungkinkan
         try {
           const urlObj = new URL(urlInput);
           const segments = urlObj.pathname.split('/').filter(Boolean);
@@ -530,7 +374,7 @@
             let rawSlug = segments[segments.length - 1];
             rawSlug = rawSlug.replace(/-i\.\d+\.\d+.*$/, '').replace(/[-_]+/g, ' ');
             if (rawSlug.length > 4) {
-              const formattedTitle = rawSlug.replace(/\w/g, l => l.toUpperCase());
+              const formattedTitle = rawSlug.replace(/\b\w/g, l => l.toUpperCase());
               document.getElementById('productTitle').value = formattedTitle;
             }
           }
@@ -542,14 +386,32 @@
     }
 
     // ==========================================
-    // 4. CANVAS VIDEO ENGINE (9:16 ROTATING SLIDES)
+    // 4. CANVAS VIDEO ENGINE (9:16 VERTICAL)
     // ==========================================
     const canvas = document.getElementById('videoCanvas');
     const ctx = canvas.getContext('2d');
+    let productImg = new Image();
+    productImg.crossOrigin = "anonymous";
+    let isImageLoaded = false;
 
     let animationId = null;
     let isPlaying = false;
     let startTime = 0;
+
+    function loadProductImage(url) {
+      isImageLoaded = false;
+      productImg = new Image();
+      productImg.crossOrigin = "anonymous";
+      productImg.onload = () => {
+        isImageLoaded = true;
+        if (!isPlaying) renderSingleFrame();
+      };
+      productImg.onerror = () => {
+        isImageLoaded = false;
+        if (!isPlaying) renderSingleFrame();
+      };
+      productImg.src = url;
+    }
 
     function wrapText(context, text, x, y, maxWidth, lineHeight, maxLines = 3) {
       const words = text.split(' ');
@@ -578,11 +440,6 @@
       const H = canvas.height;
       const t = elapsedMs / 1000;
 
-      // Rotasi gambar otomatis setiap 2.5 detik jika ada lebih dari 1 gambar
-      if (productImages.length > 1) {
-        activeImageIndex = Math.floor(t / 2.5) % productImages.length;
-      }
-
       // 1. Background Gradient Dinamis
       const bgGrad = ctx.createLinearGradient(0, 0, W, H);
       bgGrad.addColorStop(0, '#0f172a');
@@ -599,14 +456,14 @@
       ctx.fillStyle = radGrad;
       ctx.fillRect(0, 0, W, H);
 
-      // 2. Top Header Tag & Slide Indicator
+      // 2. Top Header Tag
       ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
       ctx.beginPath();
-      ctx.roundRect(40, 48, 240, 38, 19);
+      ctx.roundRect(40, 48, 220, 38, 19);
       ctx.fill();
       ctx.fillStyle = '#f472b6';
-      ctx.font = 'bold 16px "Plus Jakarta Sans", sans-serif';
-      ctx.fillText(`🔥 SLIDE ${activeImageIndex + 1} / ${productImages.length}`, 56, 73);
+      ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('🔥 REKOMENDASI VIRAL', 58, 73);
 
       // 3. Product Card Container dengan Ken Burns Zoom
       const cardX = 45;
@@ -622,10 +479,9 @@
       ctx.fillStyle = '#1e293b';
       ctx.fillRect(cardX, cardY, cardW, cardH);
 
-      const activeImgObj = loadedImagesObjects[activeImageIndex];
-      if (isImagesReady && activeImgObj && activeImgObj.complete) {
+      if (isImageLoaded) {
         const zoom = 1 + (Math.sin(t * 1.2) * 0.05 + 0.05);
-        const imgAspect = activeImgObj.width / activeImgObj.height;
+        const imgAspect = productImg.width / productImg.height;
         const cardAspect = cardW / cardH;
         let drawW, drawH;
 
@@ -638,12 +494,12 @@
         }
         const offsetX = cardX + (cardW - drawW) / 2;
         const offsetY = cardY + (cardH - drawH) / 2;
-        ctx.drawImage(activeImgObj, offsetX, offsetY, drawW, drawH);
+        ctx.drawImage(productImg, offsetX, offsetY, drawW, drawH);
       } else {
         ctx.fillStyle = '#64748b';
         ctx.font = '600 22px "Plus Jakarta Sans", sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('Memuat Gambar...', W / 2, cardY + cardH / 2);
+        ctx.fillText('Memuat Gambar Produk...', W / 2, cardY + cardH / 2);
         ctx.textAlign = 'left';
       }
       ctx.restore();
@@ -700,7 +556,7 @@
       ctx.font = '800 44px "Plus Jakarta Sans", sans-serif';
       ctx.fillText(promoPrice, 45, 735);
 
-      // 6. Dynamic Subtitle Box
+      // 6. Dynamic Subtitle Box (Sinkron dengan Naskah)
       const fullScript = document.getElementById('voiceScript').value.trim();
       const sentences = fullScript.split(/(?<=[.!?])\s+/).filter(Boolean);
       const currentSentenceIdx = sentences.length > 0 ? Math.floor(t / 3.5) % sentences.length : 0;
@@ -784,7 +640,7 @@
       stopVideoAndVoice();
       isPlaying = true;
       startTime = 0;
-      document.getElementById('renderStatus').textContent = '● Memutar Video + Slide...';
+      document.getElementById('renderStatus').textContent = '● Sedang Memutar...';
       document.getElementById('renderStatus').className = 'text-xs font-semibold text-pink-400 animate-pulse';
 
       animationId = requestAnimationFrame(animateLoop);
@@ -821,7 +677,7 @@
     function exportWebMVideo() {
       const exportBtn = document.getElementById('exportBtn');
       exportBtn.disabled = true;
-      exportBtn.innerHTML = '<span>⏳ Merekam Video (10 Detik)...</span>';
+      exportBtn.innerHTML = '<span>⏳ Merekam Video (8 Detik)...</span>';
 
       const stream = canvas.captureStream(30);
       const recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
@@ -836,13 +692,13 @@
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'PromoAI-MultiImage-Video.webm';
+        a.download = 'PromoAI-Video-Produk.webm';
         a.click();
         URL.revokeObjectURL(url);
 
         stopVideoAndVoice();
         exportBtn.disabled = false;
-        exportBtn.innerHTML = '<span>⬇ Download Video (.WebM)</span>';
+        exportBtn.innerHTML = '<span>⬇ Download Video (.mp4)</span>';
       };
 
       startVideoAndVoice();
@@ -852,16 +708,15 @@
         if (recorder.state === 'recording') {
           recorder.stop();
         }
-      }, 10000);
+      }, 8000);
     }
 
-    // Inisialisasi Awal
+    // Inisialisasi Awal Saat Halaman Dimuat
     window.addEventListener('DOMContentLoaded', () => {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.getVoices();
       }
-      updateThumbnailsUI();
-      loadActiveImage();
+      loadProductImage(document.getElementById('productImage').value);
       syncAndGenerateScript();
     });
   </script>
