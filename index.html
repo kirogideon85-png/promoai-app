@@ -96,7 +96,7 @@
           </button>
         </div>
 
-        <!-- Preset Produk Cepat (Terintegrasi) -->
+        <!-- Preset Produk Cepat -->
         <div class="mt-4 p-3.5 bg-slate-900/90 rounded-xl border border-slate-800">
           <p class="text-xs text-slate-400 mb-2.5 font-semibold flex items-center gap-1.5">
             <span>🎯</span> Isi Data Produk Cepat (1x Klik Preset Akurat):
@@ -118,45 +118,82 @@
         </div>
       </section>
 
-      <!-- Step 2: Detail Produk (Bisa Diedit Manual Kapan Saja) -->
+      <!-- Step 2: Data Produk & Upload Gambar Lokal -->
       <section class="glass-panel rounded-2xl p-5 sm:p-6 space-y-4">
         <div class="flex items-center justify-between">
           <h2 class="text-base font-bold text-white flex items-center gap-2">
             <span class="w-6 h-6 rounded-full bg-indigo-600 text-xs flex items-center justify-center font-bold">2</span>
-            Detail Produk & Visual
+            Data Produk & Visual
           </h2>
-          <span class="text-xs text-slate-400">Otomatis update ke video</span>
+          <span class="text-xs px-2.5 py-1 rounded-md bg-orange-500/10 text-orange-400 border border-orange-500/20 font-semibold">Edit Manual / Browse Foto</span>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div class="sm:col-span-2">
-            <label class="block text-xs font-semibold text-slate-400 mb-1.5">Nama Produk</label>
-            <input type="text" id="productTitle" value="Serum Niacinamide 10% Glowing Booster" oninput="syncAndGenerateScript()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500" />
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-start">
+          <!-- Kolom Kiri: Preview Foto & Tombol Browse Gambar -->
+          <div class="md:col-span-5 flex flex-col items-center bg-slate-900/90 p-3.5 rounded-xl border border-slate-800">
+            <div class="relative w-full aspect-square rounded-xl overflow-hidden bg-slate-950 border border-slate-700 mb-3">
+              <img
+                id="thumbPreview"
+                src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80"
+                alt="Preview Produk"
+                class="w-full h-full object-cover"
+              />
+              <span id="thumbBadge" class="absolute top-2.5 left-2.5 bg-red-600 text-white text-[11px] font-extrabold px-2.5 py-1 rounded-lg shadow">
+                DISKON 58%
+              </span>
+            </div>
+
+            <!-- Input File Tersembunyi + Button Browse Gambar -->
+            <input
+              type="file"
+              id="localImageInput"
+              accept="image/*"
+              class="hidden"
+              onchange="handleLocalImageUpload(event)"
+            />
+            <button
+              type="button"
+              onclick="document.getElementById('localImageInput').click()"
+              class="w-full py-2.5 px-3 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl transition flex items-center justify-center gap-2 shadow-md cursor-pointer"
+            >
+              <span>📁 Browse Gambar dari HP/PC</span>
+            </button>
+            <p id="fileNameLabel" class="text-[11px] text-slate-400 mt-1.5 text-center truncate w-full">
+              Pilih foto produk (JPG, PNG, WEBP)
+            </p>
           </div>
 
-          <div>
-            <label class="block text-xs font-semibold text-slate-400 mb-1.5">Harga Coret (Asli)</label>
-            <input type="text" id="originalPrice" value="Rp 189.000" oninput="syncAndGenerateScript()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-300 focus:outline-none focus:border-indigo-500" />
-          </div>
+          <!-- Kolom Kanan: Form Detail Produk -->
+          <div class="md:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-semibold text-slate-400 mb-1">Nama Produk</label>
+              <input type="text" id="productTitle" value="Serum Niacinamide 10% Glowing Booster" oninput="syncAndGenerateScript()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500" />
+            </div>
 
-          <div>
-            <label class="block text-xs font-semibold text-slate-400 mb-1.5">Harga Promo</label>
-            <input type="text" id="promoPrice" value="Rp 79.000" oninput="syncAndGenerateScript()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm font-bold text-emerald-400 focus:outline-none focus:border-indigo-500" />
-          </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 mb-1">Harga Coret (Normal)</label>
+              <input type="text" id="originalPrice" value="Rp 189.000" oninput="syncAndGenerateScript()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-300 focus:outline-none focus:border-indigo-500" />
+            </div>
 
-          <div>
-            <label class="block text-xs font-semibold text-slate-400 mb-1.5">Badge Promo</label>
-            <input type="text" id="discountBadge" value="DISKON 58%" oninput="renderSingleFrame()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-amber-400 font-semibold focus:outline-none focus:border-indigo-500" />
-          </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 mb-1">Harga Promo</label>
+              <input type="text" id="promoPrice" value="Rp 79.000" oninput="syncAndGenerateScript()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm font-bold text-emerald-400 focus:outline-none focus:border-indigo-500" />
+            </div>
 
-          <div>
-            <label class="block text-xs font-semibold text-slate-400 mb-1.5">URL Gambar Produk</label>
-            <input type="url" id="productImage" value="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80" oninput="loadProductImage(this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-300 focus:outline-none focus:border-indigo-500" />
-          </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 mb-1">Badge Diskon</label>
+              <input type="text" id="discountBadge" value="DISKON 58%" oninput="updateBadgeAndFrame()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-amber-400 font-semibold focus:outline-none focus:border-indigo-500" />
+            </div>
 
-          <div class="sm:col-span-2">
-            <label class="block text-xs font-semibold text-slate-400 mb-1.5">Keunggulan Utama Produk (USP)</label>
-            <textarea id="productBenefit" rows="2" oninput="syncAndGenerateScript()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">Mencerahkan wajah kusam dalam 7 hari, melembapkan kulit, dan aman untuk semua jenis kulit.</textarea>
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 mb-1">Atau URL Gambar</label>
+              <input type="url" id="productImage" value="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80" oninput="loadProductImage(this.value)" placeholder="https://..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-300 focus:outline-none focus:border-indigo-500" />
+            </div>
+
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-semibold text-slate-400 mb-1">Keunggulan Utama Produk (USP)</label>
+              <textarea id="productBenefit" rows="2" oninput="syncAndGenerateScript()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">Mencerahkan wajah kusam dalam 7 hari, melembapkan kulit, dan aman untuk semua jenis kulit.</textarea>
+            </div>
           </div>
         </div>
       </section>
@@ -278,7 +315,6 @@
       }
     };
 
-    // Fungsi Menerapkan Preset ke Form
     function applyPreset(category) {
       const data = productPresets[category];
       if (!data) return;
@@ -290,13 +326,39 @@
       document.getElementById('discountBadge').value = data.discount;
       document.getElementById('productImage').value = data.image;
       document.getElementById('productBenefit').value = data.benefit;
+      document.getElementById('fileNameLabel').textContent = "Preset: " + data.title;
 
+      updateBadgeAndFrame();
       loadProductImage(data.image);
       syncAndGenerateScript();
     }
 
     // ==========================================
-    // 2. COPYWRITING ENGINE (AIDA & PAS)
+    // 2. FITUR BROWSE / UPLOAD GAMBAR LOKAL
+    // ==========================================
+    function handleLocalImageUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      document.getElementById('fileNameLabel').textContent = "File: " + file.name;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const dataUrl = e.target.result;
+        document.getElementById('productImage').value = "(Gambar Lokal Terunggah)";
+        loadProductImage(dataUrl);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function updateBadgeAndFrame() {
+      const badgeVal = document.getElementById('discountBadge').value || 'PROMO';
+      document.getElementById('thumbBadge').textContent = badgeVal.toUpperCase();
+      if (!isPlaying) renderSingleFrame();
+    }
+
+    // ==========================================
+    // 3. COPYWRITING ENGINE (AIDA & PAS)
     // ==========================================
     function syncAndGenerateScript() {
       const title = document.getElementById('productTitle').value.trim();
@@ -325,7 +387,6 @@
           cta = `Pesan sekarang dan rasakan langsung manfaatnya.`;
         }
       } else {
-        // Framework PAS (Problem - Agitate - Solution)
         if (tone === "genz") {
           hook = `Sering kesel sama masalah yang bikin aktivitasmu terganggu?`;
           body = `Tenang, ${title} solusinya! ${benefit} Lagi diskon gede dari ${origPrice} jadi cuma ${promoPrice}!`;
@@ -342,11 +403,11 @@
       }
 
       document.getElementById('voiceScript').value = `${hook} ${body} ${cta}`;
-      renderSingleFrame();
+      if (!isPlaying) renderSingleFrame();
     }
 
     // ==========================================
-    // 3. SMART LINK PARSER & 1-CLICK ACTION
+    // 4. SMART LINK PARSER & 1-CLICK ACTION
     // ==========================================
     function handleOneClickGenerate() {
       const urlInput = document.getElementById('productUrl').value.trim();
@@ -355,7 +416,6 @@
         return;
       }
 
-      // Cek apakah URL cocok dengan salah satu preset
       const lowerUrl = urlInput.toLowerCase();
       if (lowerUrl.includes("serum") || lowerUrl.includes("skincare")) {
         applyPreset('skincare');
@@ -366,7 +426,6 @@
       } else if (lowerUrl.includes("blender") || lowerUrl.includes("juicer")) {
         applyPreset('home');
       } else {
-        // Ekstrak slug nama produk dari URL e-commerce jika memungkinkan
         try {
           const urlObj = new URL(urlInput);
           const segments = urlObj.pathname.split('/').filter(Boolean);
@@ -374,7 +433,7 @@
             let rawSlug = segments[segments.length - 1];
             rawSlug = rawSlug.replace(/-i\.\d+\.\d+.*$/, '').replace(/[-_]+/g, ' ');
             if (rawSlug.length > 4) {
-              const formattedTitle = rawSlug.replace(/\b\w/g, l => l.toUpperCase());
+              const formattedTitle = rawSlug.replace(/\w/g, l => l.toUpperCase());
               document.getElementById('productTitle').value = formattedTitle;
             }
           }
@@ -386,7 +445,7 @@
     }
 
     // ==========================================
-    // 4. CANVAS VIDEO ENGINE (9:16 VERTICAL)
+    // 5. CANVAS VIDEO ENGINE (9:16 VERTICAL)
     // ==========================================
     const canvas = document.getElementById('videoCanvas');
     const ctx = canvas.getContext('2d');
@@ -398,10 +457,15 @@
     let isPlaying = false;
     let startTime = 0;
 
-    function loadProductImage(url) {
+    function loadProductImage(src) {
+      if (!src || src === "(Gambar Lokal Terunggah)") return;
       isImageLoaded = false;
+      document.getElementById('thumbPreview').src = src;
+
       productImg = new Image();
-      productImg.crossOrigin = "anonymous";
+      if (!src.startsWith('data:')) {
+        productImg.crossOrigin = "anonymous";
+      }
       productImg.onload = () => {
         isImageLoaded = true;
         if (!isPlaying) renderSingleFrame();
@@ -410,7 +474,7 @@
         isImageLoaded = false;
         if (!isPlaying) renderSingleFrame();
       };
-      productImg.src = url;
+      productImg.src = src;
     }
 
     function wrapText(context, text, x, y, maxWidth, lineHeight, maxLines = 3) {
@@ -556,7 +620,7 @@
       ctx.font = '800 44px "Plus Jakarta Sans", sans-serif';
       ctx.fillText(promoPrice, 45, 735);
 
-      // 6. Dynamic Subtitle Box (Sinkron dengan Naskah)
+      // 6. Dynamic Subtitle Box
       const fullScript = document.getElementById('voiceScript').value.trim();
       const sentences = fullScript.split(/(?<=[.!?])\s+/).filter(Boolean);
       const currentSentenceIdx = sentences.length > 0 ? Math.floor(t / 3.5) % sentences.length : 0;
@@ -609,7 +673,7 @@
     }
 
     // ==========================================
-    // 5. WEB SPEECH API (AI VOICE OVER ID)
+    // 6. WEB SPEECH API (AI VOICE OVER ID)
     // ==========================================
     document.getElementById('voiceRate').addEventListener('input', function() {
       document.getElementById('rateLabel').textContent = this.value + 'x';
@@ -672,7 +736,7 @@
     }
 
     // ==========================================
-    // 6. EXPORT VIDEO (.WebM)
+    // 7. EXPORT VIDEO (.WebM)
     // ==========================================
     function exportWebMVideo() {
       const exportBtn = document.getElementById('exportBtn');
@@ -711,7 +775,7 @@
       }, 8000);
     }
 
-    // Inisialisasi Awal Saat Halaman Dimuat
+    // Inisialisasi Awal
     window.addEventListener('DOMContentLoaded', () => {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.getVoices();
