@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PromoAI - Auto Product Video Generator with Audio Upload</title>
+  <title>PromoAI - Auto Product Video Generator (Synced Audio & Text)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
@@ -52,13 +52,13 @@
         </div>
         <div>
           <h1 class="font-bold text-lg tracking-tight text-white leading-none">PromoAI <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 ml-1">PRO</span></h1>
-          <p class="text-[11px] text-slate-400 mt-0.5">Multi-Image Slide & Custom Audio MP4 Export</p>
+          <p class="text-[11px] text-slate-400 mt-0.5">Synced Video, Audio & Dynamic Subtitle Generator</p>
         </div>
       </div>
       <div class="flex items-center gap-3">
-        <span id="audioStatusBadge" class="hidden sm:inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">
-          <span class="w-2 h-2 rounded-full bg-slate-500"></span>
-          Belum Ada Audio Custom
+        <span id="voiceStatusBadge" class="hidden sm:inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          Sinkronisasi Aktif
         </span>
       </div>
     </div>
@@ -131,7 +131,6 @@
         <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-start">
           <!-- Kolom Kiri: Preview & Multi-Image Manager -->
           <div class="md:col-span-5 flex flex-col items-center bg-slate-900/90 p-3.5 rounded-xl border border-slate-800 space-y-3">
-            <!-- Preview Utama -->
             <div class="relative w-full aspect-square rounded-xl overflow-hidden bg-slate-950 border border-slate-700">
               <img
                 id="thumbPreview"
@@ -144,7 +143,6 @@
               </span>
             </div>
 
-            <!-- Tombol Multi-Upload -->
             <input
               type="file"
               id="multiImageInput"
@@ -158,15 +156,12 @@
               onclick="document.getElementById('multiImageInput').click()"
               class="w-full py-2.5 px-3 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl transition flex items-center justify-center gap-2 shadow-md cursor-pointer"
             >
-              <span>📁 Upload Banyak Gambar</span>
+              <span>📁 Upload Banyak Gambar Sekaligus</span>
             </button>
 
-            <!-- Thumbnail Slider / Grid Selector -->
-            <div id="thumbnailContainer" class="w-full flex gap-2 overflow-x-auto pb-1 min-h-[55px] items-center">
-              <!-- Thumbnail item dimasukkan via JS -->
-            </div>
+            <div id="thumbnailContainer" class="w-full flex gap-2 overflow-x-auto pb-1 min-h-[55px] items-center"></div>
             <p class="text-[10px] text-slate-400 text-center">
-              Klik thumbnail untuk memilih foto utama.
+              Klik salah satu gambar thumbnail di atas untuk menjadikannya sorotan utama video.
             </p>
           </div>
 
@@ -194,7 +189,7 @@
 
             <div>
               <label class="block text-xs font-semibold text-slate-400 mb-1">URL Gambar Utama</label>
-              <input type="url" id="productImage" value="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80" oninput="loadMainImageUrl(this.value)" placeholder="https://..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-300 focus:outline-none focus:border-indigo-500" />
+              <input type="url" id="productImage" value="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80" oninput="loadMainImageUrl(this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-300 focus:outline-none focus:border-indigo-500" />
             </div>
 
             <div class="sm:col-span-2">
@@ -205,61 +200,59 @@
         </div>
       </section>
 
-      <!-- Step 3: Digital Marketing Copywriting & Voice Over / Audio Upload -->
+      <!-- Step 3: Digital Marketing Copywriting, Voice Over & Custom Audio -->
       <section class="glass-panel rounded-2xl p-5 sm:p-6 space-y-4">
         <div class="flex flex-wrap items-center justify-between gap-2">
           <h2 class="text-base font-bold text-white flex items-center gap-2">
             <span class="w-6 h-6 rounded-full bg-indigo-600 text-xs flex items-center justify-center font-bold">3</span>
-            Naskah Iklan & Upload Suara (Voice Over / Musik)
+            Naskah Iklan, Suara AI & Upload Musik/VO (.MP3)
           </h2>
           <div class="flex items-center gap-2">
             <select id="copyFramework" onchange="syncAndGenerateScript()" class="bg-slate-900 border border-slate-700 text-xs text-slate-200 rounded-lg px-2.5 py-1.5 focus:outline-none">
-              <option value="AIDA">Framework: AIDA (Viral)</option>
-              <option value="PAS">Framework: PAS (Solusi)</option>
+              <option value="AIDA">AIDA (Viral)</option>
+              <option value="PAS">PAS (Solusi)</option>
             </select>
             <select id="copyTone" onchange="syncAndGenerateScript()" class="bg-slate-900 border border-slate-700 text-xs text-slate-200 rounded-lg px-2.5 py-1.5 focus:outline-none">
-              <option value="genz">Gaya: Santai / Racun TikTok</option>
-              <option value="urgency">Gaya: Hard-Selling / Urgency</option>
-              <option value="pro">Gaya: Elegan & Terpercaya</option>
+              <option value="genz">Racun TikTok</option>
+              <option value="urgency">Urgency</option>
+              <option value="pro">Elegan</option>
             </select>
           </div>
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-400 mb-1.5">Naskah Voice Over Otomatis (Referensi Teks)</label>
-          <textarea id="voiceScript" rows="2" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-slate-100 leading-relaxed focus:outline-none focus:border-indigo-500"></textarea>
+          <label class="block text-xs font-semibold text-slate-400 mb-1.5">Naskah Voice Over Otomatis (Teks & Subtitle Otomatis Sinkron)</label>
+          <textarea id="voiceScript" rows="3" oninput="onScriptChange()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3.5 text-sm text-slate-100 leading-relaxed focus:outline-none focus:border-indigo-500"></textarea>
         </div>
 
-        <!-- Fitur Upload Audio Custom -->
-        <div class="p-3.5 bg-slate-900/90 rounded-xl border border-slate-800 space-y-2.5">
+        <!-- Opsi Upload File Audio / Musik Pendukung -->
+        <div class="p-3.5 bg-slate-900/90 rounded-xl border border-slate-800 space-y-2">
           <div class="flex items-center justify-between">
             <label class="text-xs font-semibold text-indigo-300 flex items-center gap-1.5">
-              <span>🎵</span> Upload File Suara / Musik Sendiri (.mp3 / .wav)
+              <span>🎵</span> Upload File Suara / Musik Latar (.mp3 / .wav)
             </label>
-            <span id="audioFileName" class="text-[11px] text-slate-400 truncate max-w-[180px]">Belum ada file</span>
+            <span id="audioFileName" class="text-[11px] text-slate-400 italic">Belum ada file dipilih (Menggunakan AI Voice)</span>
           </div>
+          <input type="file" id="customAudioInput" accept="audio/*" class="hidden" onchange="handleAudioUpload(event)" />
           <div class="flex items-center gap-2">
-            <input type="file" id="audioFileInput" accept="audio/*" class="hidden" onchange="handleAudioUpload(event)" />
-            <button type="button" onclick="document.getElementById('audioFileInput').click()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold rounded-lg border border-slate-700 transition cursor-pointer">
-              📁 Pilih File Audio (.MP3)
+            <button type="button" onclick="document.getElementById('customAudioInput').click()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-white border border-slate-700 rounded-lg transition cursor-pointer">
+              📁 Pilih File Audio
             </button>
-            <button type="button" id="removeAudioBtn" onclick="removeCustomAudio()" class="hidden px-3 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 text-xs font-semibold rounded-lg border border-red-500/30 transition cursor-pointer">
+            <button type="button" onclick="clearCustomAudio()" id="clearAudioBtn" class="hidden px-3 py-2 bg-red-950/60 hover:bg-red-900 text-xs font-semibold text-red-300 border border-red-800/50 rounded-lg transition cursor-pointer">
               Hapus Audio
             </button>
+            <audio id="audioPreviewElement" class="hidden" controls></audio>
           </div>
-          <p class="text-[10px] text-slate-400">
-            *Dengan mengunggah file MP3, suara tersebut akan otomatis diputar dan **ikut terekam** ke dalam video saat Anda mengunduh video (.mp4)!
-          </p>
         </div>
 
         <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
           <div class="flex items-center gap-2">
-            <label class="text-xs text-slate-400">Kecepatan Suara Browser:</label>
+            <label class="text-xs text-slate-400">Kecepatan Suara:</label>
             <input type="range" id="voiceRate" min="0.85" max="1.3" step="0.05" value="1.05" class="w-24 accent-pink-500" />
             <span id="rateLabel" class="text-xs font-mono text-slate-300">1.05x</span>
           </div>
           <button type="button" onclick="speakScriptOnly()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-white border border-slate-700 transition cursor-pointer">
-            🔊 Tes Suara Robot Browser
+            🔊 Tes Suara AI Saja
           </button>
         </div>
       </section>
@@ -270,7 +263,7 @@
     <div class="lg:col-span-5 flex flex-col items-center">
       <div class="sticky top-22 w-full flex flex-col items-center">
         <div class="flex items-center justify-between w-full max-w-[320px] mb-3">
-          <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Live Studio 9:16 (Audio-Sync)</span>
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Live Studio 9:16 (Synced)</span>
           <span id="renderStatus" class="text-xs font-semibold text-indigo-400">Siap Diputar</span>
         </div>
 
@@ -289,11 +282,11 @@
               ⏹ Berhenti
             </button>
           </div>
-          <button type="button" id="exportBtn" onclick="exportMP4Video()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-3 px-4 rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50 cursor-pointer">
-            <span>⬇ Download Video (.mp4) + Audio</span>
+          <button type="button" id="exportBtn" onclick="exportMp4Video()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-3 px-4 rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50 cursor-pointer">
+            <span>⬇ Download Video (.mp4 + Suara)</span>
           </button>
           <p class="text-[11px] text-center text-slate-500">
-            Audio custom Anda akan otomatis terekam ke file MP4!
+            Subtitle dan rotasi gambar otomatis disesuaikan secara presisi dengan durasi audio!
           </p>
         </div>
       </div>
@@ -301,18 +294,17 @@
 
   </main>
 
-  <!-- Hidden Audio Element for Custom Upload -->
-  <audio id="customAudioElement" preload="auto"></audio>
-
   <script>
     // ==========================================
-    // 1. MULTI-IMAGE MANAGEMENT & PRESETS
+    // 1. MULTI-IMAGE & CUSTOM AUDIO STATE
     // ==========================================
     let productImages = [
       "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80"
     ];
     let activeImageIndex = 0;
     let customAudioBlobUrl = null;
+    let customAudioElement = new Audio();
+    let currentTotalDuration = 9.0; // Durasi default video dalam detik
 
     const productPresets = {
       skincare: {
@@ -323,7 +315,8 @@
         discount: "DISKON 58%",
         images: [
           "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1608248597359-f5383561141a?auto=format&fit=crop&w=600&q=80"
+          "https://images.unsplash.com/photo-1608248597359-f5383561141a?auto=format&fit=crop&w=600&q=80",
+          "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=600&q=80"
         ],
         benefit: "Mencerahkan wajah kusam dalam 7 hari, melembapkan kulit, dan aman untuk semua jenis kulit."
       },
@@ -335,7 +328,8 @@
         discount: "HEMAT 67%",
         images: [
           "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1572536147248-ac59a8abfa4b?auto=format&fit=crop&w=600&q=80"
+          "https://images.unsplash.com/photo-1572536147248-ac59a8abfa4b?auto=format&fit=crop&w=600&q=80",
+          "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=600&q=80"
         ],
         benefit: "Suara bass menggelegar, baterai tahan hingga 30 jam, dan tahan percikan air IPX5."
       },
@@ -347,7 +341,8 @@
         discount: "FLASH SALE",
         images: [
           "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?auto=format&fit=crop&w=600&q=80"
+          "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?auto=format&fit=crop&w=600&q=80",
+          "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=600&q=80"
         ],
         benefit: "Sol empuk anti slip, bahan sirkulasi udara sejuk di kaki, cocok untuk olahraga maupun hangout."
       },
@@ -400,7 +395,7 @@
           if (loadedCount === files.length) {
             productImages = [...newImages];
             activeImageIndex = 0;
-            document.getElementById('productImage').value = "(Multi-Gambar Terunggah)";
+            document.getElementById('productImage').value = "(Multi-Gambar Lokal Terunggah)";
             updateThumbnailsUI();
             loadActiveImage();
           }
@@ -409,44 +404,9 @@
       });
     }
 
-    // ==========================================
-    // 2. CUSTOM AUDIO UPLOAD HANDLER
-    // ==========================================
-    function handleAudioUpload(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      customAudioBlobUrl = URL.createObjectURL(file);
-      const audioEl = document.getElementById('customAudioElement');
-      audioEl.src = customAudioBlobUrl;
-
-      document.getElementById('audioFileName').textContent = file.name;
-      document.getElementById('removeAudioBtn').classList.remove('hidden');
-
-      const badge = document.getElementById('audioStatusBadge');
-      badge.className = "hidden sm:inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
-      badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Audio Custom Siap`;
-    }
-
-    function removeCustomAudio() {
-      customAudioBlobUrl = null;
-      const audioEl = document.getElementById('customAudioElement');
-      audioEl.pause();
-      audioEl.src = "";
-
-      document.getElementById('audioFileInput').value = "";
-      document.getElementById('audioFileName').textContent = "Belum ada file";
-      document.getElementById('removeAudioBtn').classList.add('hidden');
-
-      const badge = document.getElementById('audioStatusBadge');
-      badge.className = "hidden sm:inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700";
-      badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-slate-500"></span> Belum Ada Audio Custom`;
-    }
-
     function updateThumbnailsUI() {
       const container = document.getElementById('thumbnailContainer');
       container.innerHTML = '';
-
       document.getElementById('imageCountBadge').textContent = `${productImages.length} Gambar Aktif`;
 
       productImages.forEach((imgSrc, idx) => {
@@ -463,8 +423,38 @@
       });
     }
 
+    function handleAudioUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      customAudioBlobUrl = URL.createObjectURL(file);
+      customAudioElement.src = customAudioBlobUrl;
+      customAudioElement.load();
+      
+      customAudioElement.onloadedmetadata = () => {
+        if (customAudioElement.duration && !isNaN(customAudioElement.duration)) {
+          currentTotalDuration = customAudioElement.duration + 1.0; // Beri jeda 1 detik di akhir
+        }
+      };
+
+      document.getElementById('audioFileName').textContent = file.name;
+      document.getElementById('audioFileName').className = 'text-[11px] text-emerald-400 font-semibold truncate max-w-[180px]';
+      document.getElementById('clearAudioBtn').classList.remove('hidden');
+    }
+
+    function clearCustomAudio() {
+      customAudioBlobUrl = null;
+      customAudioElement.pause();
+      customAudioElement.src = '';
+      document.getElementById('customAudioInput').value = '';
+      document.getElementById('audioFileName').textContent = 'Belum ada file dipilih (Menggunakan AI Voice)';
+      document.getElementById('audioFileName').className = 'text-[11px] text-slate-400 italic';
+      document.getElementById('clearAudioBtn').classList.add('hidden');
+      currentTotalDuration = 9.0;
+    }
+
     // ==========================================
-    // 3. IMAGE LOADER & CANVAS STUDIO
+    // 2. IMAGE LOADER & CANVAS STUDIO
     // ==========================================
     let loadedImagesObjects = [];
     let isImagesReady = false;
@@ -477,7 +467,7 @@
       loadedImagesObjects = [];
       let loadedCount = 0;
 
-      productImages.forEach((src, idx) => {
+      productImages.forEach((src) => {
         const img = new Image();
         if (!src.startsWith('data:')) {
           img.crossOrigin = "anonymous";
@@ -502,7 +492,7 @@
     }
 
     function loadMainImageUrl(url) {
-      if (!url || url.includes("Terunggah")) return;
+      if (!url || url.includes("Lokal")) return;
       productImages[activeImageIndex] = url;
       updateThumbnailsUI();
       loadActiveImage();
@@ -515,7 +505,7 @@
     }
 
     // ==========================================
-    // 4. COPYWRITING ENGINE
+    // 3. COPYWRITING & SINKRONISASI SUBTITLE
     // ==========================================
     function syncAndGenerateScript() {
       const title = document.getElementById('productTitle').value.trim();
@@ -560,26 +550,56 @@
       }
 
       document.getElementById('voiceScript').value = `${hook} ${body} ${cta}`;
+      onScriptChange();
+    }
+
+    let parsedSentences = [];
+
+    function onScriptChange() {
+      const fullScript = document.getElementById('voiceScript').value.trim();
+      // Pisahkan naskah menjadi kalimat-kalimat terpisah untuk subtitle dinamis
+      parsedSentences = fullScript.split(/(?<=[.!?])\s+/).filter(Boolean);
+      if (parsedSentences.length === 0) parsedSentences = [fullScript];
       if (!isPlaying) renderSingleFrame();
     }
 
     function handleOneClickGenerate() {
       const urlInput = document.getElementById('productUrl').value.trim();
       if (!urlInput) {
-        alert("Masukkan link produk atau pilih preset cepat.");
+        alert("Masukkan link produk atau klik salah satu tombol preset cepat.");
         return;
       }
+
       const lowerUrl = urlInput.toLowerCase();
-      if (lowerUrl.includes("serum") || lowerUrl.includes("skincare")) applyPreset('skincare');
-      else if (lowerUrl.includes("tws") || lowerUrl.includes("audio")) applyPreset('gadget');
-      else if (lowerUrl.includes("sneakers") || lowerUrl.includes("sepatu")) applyPreset('fashion');
-      else applyPreset('home');
+      if (lowerUrl.includes("serum") || lowerUrl.includes("skincare")) {
+        applyPreset('skincare');
+      } else if (lowerUrl.includes("tws") || lowerUrl.includes("audio") || lowerUrl.includes("bluetooth")) {
+        applyPreset('gadget');
+      } else if (lowerUrl.includes("sneakers") || lowerUrl.includes("sepatu")) {
+        applyPreset('fashion');
+      } else if (lowerUrl.includes("blender") || lowerUrl.includes("juicer")) {
+        applyPreset('home');
+      } else {
+        try {
+          const urlObj = new URL(urlInput);
+          const segments = urlObj.pathname.split('/').filter(Boolean);
+          if (segments.length > 0) {
+            let rawSlug = segments[segments.length - 1];
+            rawSlug = rawSlug.replace(/-i\.\d+\.\d+.*$/, '').replace(/[-_]+/g, ' ');
+            if (rawSlug.length > 4) {
+              const formattedTitle = rawSlug.replace(/\w/g, l => l.toUpperCase());
+              document.getElementById('productTitle').value = formattedTitle;
+            }
+          }
+        } catch (e) {}
+        syncAndGenerateScript();
+      }
 
       startVideoAndVoice();
     }
 
     // ==========================================
-    // 5. CANVAS VIDEO ENGINE (9:16 ROTATING SLIDES)
+    // 4. CANVAS VIDEO ENGINE (9:16 SYNCED SLIDES)
     // ==========================================
     const canvas = document.getElementById('videoCanvas');
     const ctx = canvas.getContext('2d');
@@ -615,9 +635,9 @@
       const H = canvas.height;
       const t = elapsedMs / 1000;
 
-      if (productImages.length > 1) {
-        activeImageIndex = Math.floor(t / 2.5) % productImages.length;
-      }
+      // Rotasi gambar otomatis berdasarkan durasi total terbagi rata ke jumlah gambar
+      const imgDuration = currentTotalDuration / Math.max(1, productImages.length);
+      activeImageIndex = Math.min(productImages.length - 1, Math.floor(t / imgDuration));
 
       // 1. Background Gradient Dinamis
       const bgGrad = ctx.createLinearGradient(0, 0, W, H);
@@ -627,6 +647,7 @@
       ctx.fillStyle = bgGrad;
       ctx.fillRect(0, 0, W, H);
 
+      // Decorative Glow Circle
       const pulse = Math.sin(t * 3) * 15;
       const radGrad = ctx.createRadialGradient(W / 2, H * 0.36, 20, W / 2, H * 0.36, 260 + pulse);
       radGrad.addColorStop(0, 'rgba(236, 72, 153, 0.28)');
@@ -634,7 +655,7 @@
       ctx.fillStyle = radGrad;
       ctx.fillRect(0, 0, W, H);
 
-      // 2. Top Header Tag
+      // 2. Top Header Tag & Slide Indicator
       ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
       ctx.beginPath();
       ctx.roundRect(40, 48, 240, 38, 19);
@@ -643,7 +664,7 @@
       ctx.font = 'bold 16px "Plus Jakarta Sans", sans-serif';
       ctx.fillText(`🔥 SLIDE ${activeImageIndex + 1} / ${productImages.length}`, 56, 73);
 
-      // 3. Product Card Container
+      // 3. Product Card Container dengan Ken Burns Zoom
       const cardX = 45;
       const cardY = 115;
       const cardW = W - 90;
@@ -689,7 +710,7 @@
       ctx.roundRect(cardX, cardY, cardW, cardH, 28);
       ctx.stroke();
 
-      // 4. Discount Badge
+      // 4. Discount Badge Berdenyut
       const badgeText = document.getElementById('discountBadge').value || 'PROMO';
       const badgeScale = 1 + Math.sin(t * 6) * 0.04;
       ctx.save();
@@ -706,7 +727,7 @@
       ctx.restore();
       ctx.textAlign = 'left';
 
-      // 5. Title & Price
+      // 5. Product Title & Price Box
       const title = document.getElementById('productTitle').value || 'Nama Produk';
       const origPrice = document.getElementById('originalPrice').value || '';
       const promoPrice = document.getElementById('promoPrice').value || '';
@@ -732,11 +753,11 @@
       ctx.font = '800 44px "Plus Jakarta Sans", sans-serif';
       ctx.fillText(promoPrice, 45, 735);
 
-      // 6. Subtitle Box
-      const fullScript = document.getElementById('voiceScript').value.trim();
-      const sentences = fullScript.split(/(?<=[.!?])\s+/).filter(Boolean);
-      const currentSentenceIdx = sentences.length > 0 ? Math.floor(t / 3.5) % sentences.length : 0;
-      const activeSubtitle = sentences[currentSentenceIdx] || fullScript;
+      // 6. Dynamic Subtitle Sinkron Presisi dengan Durasi
+      if (parsedSentences.length === 0) onScriptChange();
+      const sentenceDuration = currentTotalDuration / Math.max(1, parsedSentences.length);
+      const currentSentenceIdx = Math.min(parsedSentences.length - 1, Math.floor(t / sentenceDuration));
+      const activeSubtitle = parsedSentences[currentSentenceIdx] || document.getElementById('voiceScript').value;
 
       ctx.fillStyle = 'rgba(15, 23, 42, 0.88)';
       ctx.beginPath();
@@ -750,7 +771,7 @@
       ctx.font = '600 20px "Plus Jakarta Sans", sans-serif';
       wrapText(ctx, `"${activeSubtitle}"`, 60, 802, W - 120, 28, 3);
 
-      // 7. CTA Bar & Waveform
+      // 7. Bottom CTA Bar & Audio Waveform
       const ctaGrad = ctx.createLinearGradient(40, 888, W - 40, 888);
       ctaGrad.addColorStop(0, '#6366f1');
       ctaGrad.addColorStop(1, '#ec4899');
@@ -776,21 +797,32 @@
 
     function animateLoop(timestamp) {
       if (!startTime) startTime = timestamp;
-      const elapsed = timestamp - startTime;
-      drawFrame(elapsed);
+      const elapsed = (timestamp - startTime) / 1000;
+
+      if (elapsed >= currentTotalDuration) {
+        stopVideoAndVoice();
+        return;
+      }
+
+      drawFrame(timestamp - startTime);
       if (isPlaying) {
         animationId = requestAnimationFrame(animateLoop);
       }
     }
 
     // ==========================================
-    // 6. AUDIO & SPEECH PLAYBACK + RECORDING
+    // 5. AUDIO & SPEECH PLAYBACK
     // ==========================================
     document.getElementById('voiceRate').addEventListener('input', function() {
       document.getElementById('rateLabel').textContent = this.value + 'x';
     });
 
     function speakScriptOnly() {
+      if (customAudioBlobUrl) {
+        customAudioElement.currentTime = 0;
+        customAudioElement.play();
+        return;
+      }
       if (!('speechSynthesis' in window)) return;
       window.speechSynthesis.cancel();
       const text = document.getElementById('voiceScript').value.trim();
@@ -804,82 +836,92 @@
       stopVideoAndVoice();
       isPlaying = true;
       startTime = 0;
-      document.getElementById('renderStatus').textContent = '● Memutar Video + Audio...';
+
+      document.getElementById('renderStatus').textContent = '● Memutar Video & Audio...';
       document.getElementById('renderStatus').className = 'text-xs font-semibold text-pink-400 animate-pulse';
 
-      animationId = requestAnimationFrame(animateLoop);
-
-      // Putar custom audio jika ada
-      const audioEl = document.getElementById('customAudioElement');
+      // Jika ada custom audio, gunakan durasinya
       if (customAudioBlobUrl) {
-        audioEl.currentTime = 0;
-        audioEl.play().catch(e => console.log(e));
+        customAudioElement.currentTime = 0;
+        customAudioElement.play().catch(e => {});
+        if (customAudioElement.duration && !isNaN(customAudioElement.duration)) {
+          currentTotalDuration = customAudioElement.duration + 0.5;
+        }
       } else if ('speechSynthesis' in window) {
         const text = document.getElementById('voiceScript').value.trim();
+        // Estimasi durasi berdasarkan jumlah kata & rate
+        const wordCount = text.split(/\s+/).length;
+        const rate = parseFloat(document.getElementById('voiceRate').value) || 1.05;
+        currentTotalDuration = Math.max(6.0, (wordCount / 3.0) / rate);
+
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'id-ID';
-        utterance.rate = parseFloat(document.getElementById('voiceRate').value) || 1.05;
+        utterance.rate = rate;
+        const voices = window.speechSynthesis.getVoices();
+        const idVoice = voices.find(v => v.lang.includes('id-ID') || v.lang.includes('id_ID'));
+        if (idVoice) utterance.voice = idVoice;
         window.speechSynthesis.speak(utterance);
       }
+
+      animationId = requestAnimationFrame(animateLoop);
     }
 
     function stopVideoAndVoice() {
       isPlaying = false;
       if (animationId) cancelAnimationFrame(animationId);
       if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-      const audioEl = document.getElementById('customAudioElement');
-      audioEl.pause();
-
+      if (customAudioBlobUrl) {
+        customAudioElement.pause();
+        customAudioElement.currentTime = 0;
+      }
       document.getElementById('renderStatus').textContent = 'Siap Diputar';
       document.getElementById('renderStatus').className = 'text-xs font-semibold text-indigo-400';
       renderSingleFrame();
     }
 
     // ==========================================
-    // 7. EXPORT VIDEO (.mp4) WITH AUDIO STREAM
+    // 6. EXPORT VIDEO (.mp4 DENGAN AUDIO GABUNGAN)
     // ==========================================
-    function exportMP4Video() {
+    function exportMp4Video() {
       const exportBtn = document.getElementById('exportBtn');
       exportBtn.disabled = true;
-      exportBtn.innerHTML = '<span>⏳ Merekam Video & Audio (10 Detik)...</span>';
+      exportBtn.innerHTML = `<span>⏳ Merekam Video (${Math.ceil(currentTotalDuration)} Detik)...</span>`;
 
       const canvasStream = canvas.captureStream(30);
       let combinedStream = canvasStream;
 
-      // Gabungkan audio custom ke dalam stream rekaman jika ada
-      const audioEl = document.getElementById('customAudioElement');
-      if (customAudioBlobUrl && audioEl.src) {
+      // Jika ada custom audio (.mp3), gabungkan track audionya ke stream rekaman video
+      if (customAudioBlobUrl && customAudioElement.src) {
         try {
           const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-          const sourceNode = audioCtx.createMediaElementSource(audioEl);
+          const sourceNode = audioCtx.createMediaElementSource(customAudioElement);
           const destinationNode = audioCtx.createMediaStreamDestination();
           sourceNode.connect(destinationNode);
-          sourceNode.connect(audioCtx.destination); // agar tetap terdengar di speaker
+          sourceNode.connect(audioCtx.destination); // agar tetap terdengar saat direkam
 
-          if (audioCtx.state === 'suspended') {
-            audioCtx.resume();
-          }
-
-          const audioTrack = destinationNode.stream.getAudioTracks()[0];
-          if (audioTrack) {
-            combinedStream.addTrack(audioTrack);
+          if (destinationNode.stream && destinationNode.stream.getAudioTracks().length > 0) {
+            const audioTrack = destinationNode.stream.getAudioTracks()[0];
+            canvasStream.addTrack(audioTrack);
           }
         } catch (e) {
-          console.log("Audio stream combination note:", e);
+          console.log("Audio streaming fallback active:", e);
         }
       }
 
-      let mimeType = 'video/mp4';
+      let options = { mimeType: 'video/mp4' };
       if (!MediaRecorder.isTypeSupported('video/mp4')) {
-        mimeType = 'video/webm';
+        if (MediaRecorder.isTypeSupported('video/webm;codecs=h264')) {
+          options = { mimeType: 'video/webm;codecs=h264' };
+        } else {
+          options = { mimeType: 'video/webm' };
+        }
       }
 
       let recorder;
       try {
-        recorder = new MediaRecorder(combinedStream, { mimeType: mimeType });
-      } catch (err) {
-        recorder = new MediaRecorder(canvasStream);
-        mimeType = 'video/webm';
+        recorder = new MediaRecorder(combinedStream, options);
+      } catch (e) {
+        recorder = new MediaRecorder(combinedStream);
       }
 
       const chunks = [];
@@ -888,18 +930,18 @@
       };
 
       recorder.onstop = () => {
-        const ext = mimeType.includes('mp4') ? 'mp4' : 'webm';
-        const blob = new Blob(chunks, { type: mimeType });
+        const isMp4 = recorder.mimeType.includes('mp4');
+        const blob = new Blob(chunks, { type: isMp4 ? 'video/mp4' : 'video/webm' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `PromoAI-Video-Produk.${ext}`;
+        a.download = isMp4 ? 'PromoAI-Video-Lengkap.mp4' : 'PromoAI-Video-Lengkap.webm';
         a.click();
         URL.revokeObjectURL(url);
 
         stopVideoAndVoice();
         exportBtn.disabled = false;
-        exportBtn.innerHTML = '<span>⬇ Download Video (.mp4) + Audio</span>';
+        exportBtn.innerHTML = '<span>⬇ Download Video (.mp4 + Suara)</span>';
       };
 
       startVideoAndVoice();
@@ -909,10 +951,13 @@
         if (recorder.state === 'recording') {
           recorder.stop();
         }
-      }, 10000);
+      }, (currentTotalDuration * 1000) + 500);
     }
 
     window.addEventListener('DOMContentLoaded', () => {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.getVoices();
+      }
       updateThumbnailsUI();
       loadActiveImage();
       syncAndGenerateScript();
