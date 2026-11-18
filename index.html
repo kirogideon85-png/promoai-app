@@ -1,1190 +1,724 @@
 <!DOCTYPE html>
-<html lang="id" class="dark">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PromoAI - Auto Product Video Generator</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: {
-                            50: '#f5f3ff',
-                            100: '#ede9fe',
-                            500: '#8b5cf6',
-                            600: '#7c3aed',
-                            700: '#6d28d9',
-                            900: '#4c1d95',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(139, 92, 246, 0.3);
-            border-radius: 9999px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(139, 92, 246, 0.6);
-        }
-
-        /* Pulse Glow Animation */
-        @keyframes pulseGlow {
-            0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.4); }
-            50% { box-shadow: 0 0 35px rgba(236, 72, 153, 0.6); }
-        }
-        .glow-btn {
-            animation: pulseGlow 3s infinite;
-        }
-
-        /* Phone Mockup Aspect Ratio 9:16 */
-        .phone-frame {
-            aspect-ratio: 9 / 16;
-            max-height: 640px;
-            width: 100%;
-            max-width: 360px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PromoAI - Auto Product Video Generator (1-Click)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #0b0f19;
+      color: #f8fafc;
+    }
+    .glass-panel {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(51, 65, 85, 0.6);
+    }
+    .gradient-btn {
+      background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
+      transition: all 0.25s ease;
+    }
+    .gradient-btn:hover {
+      opacity: 0.92;
+      transform: translateY(-1px);
+      box-shadow: 0 10px 25px -5px rgba(236, 72, 153, 0.4);
+    }
+    .phone-frame {
+      box-shadow: 0 0 0 10px #1e293b, 0 0 0 12px #334155, 0 25px 50px -12px rgba(0, 0, 0, 0.85);
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 3px;
+    }
+  </style>
 </head>
-<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans antialiased transition-colors duration-300 min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col">
 
-    <!-- Top Navigation Bar -->
-    <header class="sticky top-0 z-40 border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-pink-500 flex items-center justify-center text-white shadow-lg">
-                    <i class="fa-solid fa-wand-magic-sparkles text-lg"></i>
-                </div>
-                <div>
-                    <h1 class="font-extrabold text-xl tracking-tight bg-gradient-to-r from-brand-500 to-pink-500 bg-clip-text text-transparent">
-                        PromoAI
-                    </h1>
-                    <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium -mt-1">1-Click E-Commerce Video Ads</p>
-                </div>
-            </div>
-
-            <div class="flex items-center gap-3">
-                <span class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-                    AI Engine Ready
-                </span>
-                <button id="themeToggle" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title="Ganti Tema">
-                    <i class="fa-solid fa-sun text-amber-400 hidden dark:inline"></i>
-                    <i class="fa-solid fa-moon text-slate-700 dark:hidden"></i>
-                </button>
-            </div>
+  <!-- Navbar -->
+  <header class="border-b border-slate-800 bg-slate-950/80 sticky top-0 z-30 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-pink-500 flex items-center justify-center font-extrabold text-white text-lg shadow-lg">
+          P
         </div>
-    </header>
-
-    <!-- Main Workspace -->
-    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
-        
-        <!-- Hero URL Input Section -->
-        <section class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 sm:p-7 shadow-xl shadow-slate-200/40 dark:shadow-none mb-8">
-            <div class="max-w-3xl mx-auto text-center mb-6">
-                <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2">
-                    Ubah Link Produk Jadi Video Iklan Viral dalam <span class="text-brand-500">1x Klik</span>
-                </h2>
-                <p class="text-sm sm:text-base text-slate-500 dark:text-slate-400">
-                    Tempel URL produk dari Shopee, Tokopedia, TikTok Shop, atau Amazon. AI otomatis mengekstrak foto, meracik copywriting AIDA/PAS, membuat animasi 9:16, dan mengisi Voice Over!
-                </p>
-            </div>
-
-            <!-- Input Bar -->
-            <div class="max-w-4xl mx-auto">
-                <div class="flex flex-col sm:flex-row gap-3">
-                    <div class="relative flex-1">
-                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
-                            <i class="fa-solid fa-link"></i>
-                        </div>
-                        <input 
-                            type="url" 
-                            id="productUrlInput" 
-                            placeholder="Tempel link produk e-commerce di sini (contoh: https://shopee.co.id/produk-viral...)" 
-                            class="w-full pl-11 pr-10 py-3.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none text-sm transition-all"
-                        >
-                        <button id="clearUrlBtn" class="hidden absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
-                            <i class="fa-solid fa-circle-xmark"></i>
-                        </button>
-                    </div>
-                    <button 
-                        id="generateBtn" 
-                        class="glow-btn px-6 py-3.5 rounded-xl bg-gradient-to-r from-brand-600 via-purple-600 to-pink-600 hover:from-brand-500 hover:to-pink-500 text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2.5 shadow-lg transition-all active:scale-95 whitespace-nowrap cursor-pointer"
-                    >
-                        <i class="fa-solid fa-bolt"></i>
-                        <span>Generate Video 1-Klik</span>
-                    </button>
-                </div>
-
-                <!-- Quick Preset Chips -->
-                <div class="mt-4 flex flex-wrap items-center justify-center gap-2 text-xs">
-                    <span class="text-slate-500 dark:text-slate-400 font-medium mr-1">Coba Contoh Cepat:</span>
-                    <button onclick="loadPreset('shopee')" class="px-3 py-1.5 rounded-lg bg-orange-500/10 hover:bg-orange-500/20 text-orange-600 dark:text-orange-400 border border-orange-500/20 font-medium transition flex items-center gap-1.5 cursor-pointer">
-                        <i class="fa-solid fa-bag-shopping"></i> Shopee: TWS ANC Pro
-                    </button>
-                    <button onclick="loadPreset('tokopedia')" class="px-3 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 font-medium transition flex items-center gap-1.5 cursor-pointer">
-                        <i class="fa-solid fa-store"></i> Tokopedia: Serum Glow Vit-C
-                    </button>
-                    <button onclick="loadPreset('tiktok')" class="px-3 py-1.5 rounded-lg bg-pink-500/10 hover:bg-pink-500/20 text-pink-600 dark:text-pink-400 border border-pink-500/20 font-medium transition flex items-center gap-1.5 cursor-pointer">
-                        <i class="fa-brands fa-tiktok"></i> TikTok Shop: Smart Blender Portable
-                    </button>
-                </div>
-            </div>
-
-            <!-- AI Processing Pipeline Stepper (Hidden by default, shown during scraping) -->
-            <div id="pipelineContainer" class="hidden max-w-3xl mx-auto mt-6 pt-6 border-t border-slate-200 dark:border-slate-800">
-                <div class="flex items-center justify-between text-xs font-semibold mb-2">
-                    <span id="pipelineStatusText" class="text-brand-500 flex items-center gap-2">
-                        <i class="fa-solid fa-circle-notch fa-spin"></i> Mengekstrak metadata & gambar produk...
-                    </span>
-                    <span id="pipelinePercent" class="text-slate-500">0%</span>
-                </div>
-                <div class="w-full h-2.5 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
-                    <div id="pipelineBar" class="h-full bg-gradient-to-r from-brand-500 to-pink-500 rounded-full transition-all duration-300" style="width: 0%"></div>
-                </div>
-                <div class="grid grid-cols-4 gap-2 mt-3 text-[11px] text-center text-slate-500 dark:text-slate-400">
-                    <div id="step1" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800/50">1. Scraping Link</div>
-                    <div id="step2" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800/50">2. Copywriting AIDA</div>
-                    <div id="step3" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800/50">3. Sintesis Suara AI</div>
-                    <div id="step4" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800/50">4. Render Video 9:16</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Studio Workspace Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            
-            <!-- Left Column: Product Metadata & AI Copywriting Studio (7 cols) -->
-            <div class="lg:col-span-7 space-y-6">
-                
-                <!-- Extracted Product Card -->
-                <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-sm">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="font-bold text-base flex items-center gap-2">
-                            <i class="fa-solid fa-database text-brand-500"></i>
-                            Data Produk Hasil Scraping
-                        </h3>
-                        <span id="platformBadge" class="px-2.5 py-1 rounded-md text-xs font-bold bg-orange-500/10 text-orange-500 border border-orange-500/20">
-                            Shopee Mall
-                        </span>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <!-- Product Thumbnail Gallery -->
-                        <div class="sm:col-span-1 space-y-2">
-                            <div class="aspect-square rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 relative">
-                                <img id="previewMainImg" src="" alt="Produk" class="w-full h-full object-cover">
-                                <span id="discountBadge" class="absolute top-2 left-2 bg-rose-600 text-white text-[11px] font-extrabold px-2 py-0.5 rounded-md shadow">
-                                    -55%
-                                </span>
-                            </div>
-                            <div id="thumbnailStrip" class="grid grid-cols-3 gap-1.5">
-                                <!-- Thumbnails populated via JS -->
-                            </div>
-                        </div>
-
-                        <!-- Editable Product Info -->
-                        <div class="sm:col-span-2 space-y-3">
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Nama Produk</label>
-                                <input type="text" id="prodTitle" class="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm font-semibold focus:ring-2 focus:ring-brand-500 outline-none">
-                            </div>
-                            <div class="grid grid-cols-2 gap-3">
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Harga Coret (Normal)</label>
-                                    <input type="text" id="prodOriginalPrice" class="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm line-through text-slate-400 focus:ring-2 focus:ring-brand-500 outline-none">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Harga Promo Flash Sale</label>
-                                    <input type="text" id="prodPromoPrice" class="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm font-bold text-emerald-500 focus:ring-2 focus:ring-brand-500 outline-none">
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Keunggulan Utama (USP)</label>
-                                <input type="text" id="prodUsp" class="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm focus:ring-2 focus:ring-brand-500 outline-none">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- AI Copywriting & Voice Over Studio -->
-                <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-sm">
-                    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
-                        <h3 class="font-bold text-base flex items-center gap-2">
-                            <i class="fa-solid fa-microphone-lines text-pink-500"></i>
-                            Naskah Iklan AI & Voice Over
-                        </h3>
-
-                        <!-- Tone / Marketing Style Selector -->
-                        <div class="flex items-center gap-2">
-                            <label class="text-xs font-semibold text-slate-500 dark:text-slate-400">Gaya Bahasa:</label>
-                            <select id="toneSelector" class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold focus:ring-2 focus:ring-brand-500 outline-none cursor-pointer">
-                                <option value="genz">🔥 Santai / Gen-Z (FYP TikTok)</option>
-                                <option value="pro">💼 Profesional & Elegan</option>
-                                <option value="urgency">⚡ Hard-Selling / Urgency</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Framework Tabs -->
-                    <div class="flex items-center gap-2 mb-4 p-1 bg-slate-100 dark:bg-slate-950 rounded-xl w-fit">
-                        <button id="fwAidaBtn" onclick="setFramework('AIDA')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white dark:bg-slate-800 text-brand-600 dark:text-brand-400 shadow-sm transition cursor-pointer">
-                            Framework AIDA
-                        </button>
-                        <button id="fwPasBtn" onclick="setFramework('PAS')" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition cursor-pointer">
-                            Framework PAS
-                        </button>
-                    </div>
-
-                    <!-- Editable Script Scenes -->
-                    <div class="space-y-3">
-                        <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
-                            <div class="flex items-center justify-between mb-1">
-                                <span id="labelScene1" class="text-[11px] font-extrabold uppercase tracking-wider text-pink-500">Scene 1: Attention / Hook (0-4 Detik)</span>
-                                <span class="text-[11px] text-slate-400">Tampil di layar + VO</span>
-                            </div>
-                            <textarea id="scriptHook" rows="2" class="w-full bg-transparent text-sm font-medium focus:outline-none resize-none"></textarea>
-                        </div>
-
-                        <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
-                            <div class="flex items-center justify-between mb-1">
-                                <span id="labelScene2" class="text-[11px] font-extrabold uppercase tracking-wider text-brand-500">Scene 2: Interest & Desire / Solusi (4-9 Detik)</span>
-                                <span class="text-[11px] text-slate-400">Tampil di layar + VO</span>
-                            </div>
-                            <textarea id="scriptBody" rows="2" class="w-full bg-transparent text-sm font-medium focus:outline-none resize-none"></textarea>
-                        </div>
-
-                        <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
-                            <div class="flex items-center justify-between mb-1">
-                                <span id="labelScene3" class="text-[11px] font-extrabold uppercase tracking-wider text-emerald-500">Scene 3: Action / Promo CTA (9-13 Detik)</span>
-                                <span class="text-[11px] text-slate-400">Harga Promo + VO</span>
-                            </div>
-                            <textarea id="scriptCta" rows="2" class="w-full bg-transparent text-sm font-medium focus:outline-none resize-none"></textarea>
-                        </div>
-                    </div>
-
-                    <!-- Voice Settings -->
-                    <div class="mt-4 pt-4 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
-                        <div class="flex items-center gap-3">
-                            <label class="inline-flex items-center gap-2 cursor-pointer text-xs font-semibold">
-                                <input type="checkbox" id="voToggle" checked class="w-4 h-4 rounded text-brand-600 focus:ring-brand-500">
-                                <span>Aktifkan Voice Over AI (Bahasa Indonesia)</span>
-                            </label>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <span class="text-xs text-slate-500">Kecepatan Bicara:</span>
-                            <select id="voiceRate" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-semibold border border-slate-200 dark:border-slate-700 outline-none">
-                                <option value="0.95">Normal (0.95x)</option>
-                                <option value="1.1" selected>Energik TikTok (1.1x)</option>
-                                <option value="1.25">Cepat (1.25x)</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right Column: Live 9:16 Video Canvas & Controls (5 cols) -->
-            <div class="lg:col-span-5 flex flex-col items-center">
-                <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 w-full shadow-sm flex flex-col items-center">
-                    
-                    <div class="w-full flex items-center justify-between mb-4">
-                        <div class="flex items-center gap-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse"></span>
-                            <h3 class="font-bold text-sm">Live Preview (9:16 Reels / TikTok)</h3>
-                        </div>
-                        <span id="timerDisplay" class="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-                            00:00 / 00:13
-                        </span>
-                    </div>
-
-                    <!-- Smartphone Frame Container -->
-                    <div class="phone-frame relative rounded-[2rem] p-2.5 bg-slate-900 border-4 border-slate-800 shadow-2xl overflow-hidden flex items-center justify-center">
-                        <!-- Dynamic Island Notch -->
-                        <div class="absolute top-4 left-1/2 -translate-x-1/2 w-20 h-4 bg-black rounded-full z-20 pointer-events-none"></div>
-                        
-                        <!-- HTML5 Rendering Canvas -->
-                        <canvas id="videoCanvas" class="w-full h-full rounded-[1.4rem] bg-slate-950 block"></canvas>
-
-                        <!-- Floating Overlay Play Button when paused -->
-                        <button id="canvasOverlayPlay" class="absolute inset-0 m-auto w-16 h-16 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md text-white flex items-center justify-center text-2xl shadow-xl transition-transform hover:scale-110 cursor-pointer z-10">
-                            <i class="fa-solid fa-play ml-1"></i>
-                        </button>
-                    </div>
-
-                    <!-- Video Playback & Export Controls -->
-                    <div class="w-full max-w-[360px] mt-5 space-y-3">
-                        <!-- Progress Scrubber -->
-                        <div class="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden cursor-pointer" id="videoProgressContainer">
-                            <div id="videoProgressBar" class="h-full bg-gradient-to-r from-brand-500 to-pink-500 w-0 transition-all duration-75"></div>
-                        </div>
-
-                        <!-- Control Buttons -->
-                        <div class="grid grid-cols-2 gap-2.5">
-                            <button id="playPauseBtn" class="py-2.5 px-4 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow transition cursor-pointer">
-                                <i class="fa-solid fa-play" id="playIcon"></i>
-                                <span id="playBtnText">Putar + Voice Over</span>
-                            </button>
-                            <button id="stopBtn" class="py-2.5 px-4 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 transition cursor-pointer">
-                                <i class="fa-solid fa-rotate-left"></i>
-                                <span>Ulangi</span>
-                            </button>
-                        </div>
-
-                        <!-- Export Action Button -->
-                        <button id="exportBtn" class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20 transition cursor-pointer">
-                            <i class="fa-solid fa-download"></i>
-                            <span>Render & Download Video MP4 (1080p)</span>
-                        </button>
-                    </div>
-
-                </div>
-            </div>
-
+        <div>
+          <h1 class="font-bold text-lg tracking-tight text-white leading-none">PromoAI <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 ml-1">PRO</span></h1>
+          <p class="text-[11px] text-slate-400 mt-0.5">1-Click E-Commerce Link to Vertical Video & AI Voice Over</p>
         </div>
-    </main>
+      </div>
+      <div class="flex items-center gap-3">
+        <span id="voiceStatusBadge" class="hidden sm:inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          AI Voice ID Siap
+        </span>
+      </div>
+    </div>
+  </header>
 
-    <!-- Custom Modal Notification (Replaces alert) -->
-    <div id="customModal" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl transform transition-all">
-            <div class="flex items-center gap-3 mb-3">
-                <div id="modalIconBg" class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center text-lg">
-                    <i id="modalIcon" class="fa-solid fa-circle-check"></i>
-                </div>
-                <h4 id="modalTitle" class="font-bold text-lg">Video Siap Diunduh!</h4>
-            </div>
-            <p id="modalMessage" class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-5">
-                Video iklan produk beresolusi 1080x1920 (60fps) beserta audio Voice Over AI berhasil dirender.
-            </p>
-            <div id="modalProgressWrapper" class="hidden mb-5">
-                <div class="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
-                    <div id="modalProgressBar" class="h-full bg-emerald-500 transition-all duration-200" style="width: 0%"></div>
-                </div>
-                <p id="modalProgressLabel" class="text-xs text-slate-400 mt-1.5 text-right">0%</p>
-            </div>
-            <div class="flex justify-end gap-2">
-                <button id="closeModalBtn" class="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold transition cursor-pointer">
-                    Tutup & Selesai
-                </button>
-            </div>
+  <!-- Main Workspace -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+    <!-- Left Panel: Input & Controls -->
+    <div class="lg:col-span-7 space-y-6">
+
+      <!-- Step 1: Link Input & Quick Presets -->
+      <section class="glass-panel rounded-2xl p-5 sm:p-6">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-base font-bold text-white flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-indigo-600 text-xs flex items-center justify-center font-bold">1</span>
+            Link Produk E-Commerce atau Pilih Preset Cepat
+          </h2>
         </div>
+
+        <div class="flex flex-col sm:flex-row gap-2.5">
+          <input
+            type="url"
+            id="productUrl"
+            placeholder="Tempel link Shopee, Tokopedia, TikTok Shop..."
+            value="https://shopee.co.id/Serum-Niacinamide-10-Glowing-Booster-i.123456"
+            class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+          />
+          <button
+            type="button"
+            onclick="handleOneClickGenerate()"
+            class="gradient-btn text-white font-bold text-sm px-5 py-3 rounded-xl whitespace-nowrap flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <span>⚡ 1-Klik Generate</span>
+          </button>
+        </div>
+
+        <!-- Preset Produk Cepat (Terintegrasi) -->
+        <div class="mt-4 p-3.5 bg-slate-900/90 rounded-xl border border-slate-800">
+          <p class="text-xs text-slate-400 mb-2.5 font-semibold flex items-center gap-1.5">
+            <span>🎯</span> Isi Data Produk Cepat (1x Klik Preset Akurat):
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" onclick="applyPreset('skincare')" class="px-3 py-1.5 text-xs font-semibold bg-pink-600 hover:bg-pink-500 text-white rounded-lg transition cursor-pointer">
+              ✨ Serum Glowing
+            </button>
+            <button type="button" onclick="applyPreset('gadget')" class="px-3 py-1.5 text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition cursor-pointer">
+              🎧 TWS Wireless
+            </button>
+            <button type="button" onclick="applyPreset('fashion')" class="px-3 py-1.5 text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition cursor-pointer">
+              👟 Sneakers Pria
+            </button>
+            <button type="button" onclick="applyPreset('home')" class="px-3 py-1.5 text-xs font-semibold bg-amber-600 hover:bg-amber-500 text-white rounded-lg transition cursor-pointer">
+              ☕ Blender Portable
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Step 2: Detail Produk (Bisa Diedit Manual Kapan Saja) -->
+      <section class="glass-panel rounded-2xl p-5 sm:p-6 space-y-4">
+        <div class="flex items-center justify-between">
+          <h2 class="text-base font-bold text-white flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-indigo-600 text-xs flex items-center justify-center font-bold">2</span>
+            Detail Produk & Visual
+          </h2>
+          <span class="text-xs text-slate-400">Otomatis update ke video</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-semibold text-slate-400 mb-1.5">Nama Produk</label>
+            <input type="text" id="productTitle" value="Serum Niacinamide 10% Glowing Booster" oninput="syncAndGenerateScript()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1.5">Harga Coret (Asli)</label>
+            <input type="text" id="originalPrice" value="Rp 189.000" oninput="syncAndGenerateScript()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-300 focus:outline-none focus:border-indigo-500" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1.5">Harga Promo</label>
+            <input type="text" id="promoPrice" value="Rp 79.000" oninput="syncAndGenerateScript()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm font-bold text-emerald-400 focus:outline-none focus:border-indigo-500" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1.5">Badge Promo</label>
+            <input type="text" id="discountBadge" value="DISKON 58%" oninput="renderSingleFrame()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-amber-400 font-semibold focus:outline-none focus:border-indigo-500" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1.5">URL Gambar Produk</label>
+            <input type="url" id="productImage" value="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80" oninput="loadProductImage(this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-300 focus:outline-none focus:border-indigo-500" />
+          </div>
+
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-semibold text-slate-400 mb-1.5">Keunggulan Utama Produk (USP)</label>
+            <textarea id="productBenefit" rows="2" oninput="syncAndGenerateScript()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">Mencerahkan wajah kusam dalam 7 hari, melembapkan kulit, dan aman untuk semua jenis kulit.</textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- Step 3: Digital Marketing Copywriting & Voice Over -->
+      <section class="glass-panel rounded-2xl p-5 sm:p-6 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h2 class="text-base font-bold text-white flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-indigo-600 text-xs flex items-center justify-center font-bold">3</span>
+            Naskah Iklan & AI Voice Over
+          </h2>
+          <div class="flex items-center gap-2">
+            <select id="copyFramework" onchange="syncAndGenerateScript()" class="bg-slate-900 border border-slate-700 text-xs text-slate-200 rounded-lg px-2.5 py-1.5 focus:outline-none">
+              <option value="AIDA">Framework: AIDA (Viral)</option>
+              <option value="PAS">Framework: PAS (Solusi)</option>
+            </select>
+            <select id="copyTone" onchange="syncAndGenerateScript()" class="bg-slate-900 border border-slate-700 text-xs text-slate-200 rounded-lg px-2.5 py-1.5 focus:outline-none">
+              <option value="genz">Gaya: Santai / Racun TikTok</option>
+              <option value="urgency">Gaya: Hard-Selling / Urgency</option>
+              <option value="pro">Gaya: Elegan & Terpercaya</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 mb-1.5">Naskah Voice Over Otomatis (Bisa Diedit)</label>
+          <textarea id="voiceScript" rows="3" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3.5 text-sm text-slate-100 leading-relaxed focus:outline-none focus:border-indigo-500"></textarea>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+          <div class="flex items-center gap-2">
+            <label class="text-xs text-slate-400">Kecepatan Suara:</label>
+            <input type="range" id="voiceRate" min="0.85" max="1.3" step="0.05" value="1.05" class="w-24 accent-pink-500" />
+            <span id="rateLabel" class="text-xs font-mono text-slate-300">1.05x</span>
+          </div>
+          <button type="button" onclick="speakScriptOnly()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-white border border-slate-700 transition cursor-pointer">
+            🔊 Tes Suara Voice Over Saja
+          </button>
+        </div>
+      </section>
+
     </div>
 
-    <script>
-        /**
-         * ============================================================================
-         * PROMOAI - CORE APPLICATION LOGIC
-         * Digital Marketing Engine + Canvas Video Renderer + Web Speech API TTS
-         * ============================================================================
-         */
+    <!-- Right Panel: Live Vertical Video Studio (9:16) -->
+    <div class="lg:col-span-5 flex flex-col items-center">
+      <div class="sticky top-22 w-full flex flex-col items-center">
+        <div class="flex items-center justify-between w-full max-w-[320px] mb-3">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Live Studio 9:16</span>
+          <span id="renderStatus" class="text-xs font-semibold text-indigo-400">Siap Diputar</span>
+        </div>
 
-        // --- 1. DATABASE PRESET PRODUK E-COMMERCE ---
-        const PRODUCT_PRESETS = {
-            shopee: {
-                url: "https://shopee.co.id/SoundPulse-TWS-ANC-Pro-Wireless-Earbuds-Bluetooth-5.4-Bass-Boost-i.98213.4412",
-                platform: "Shopee Mall",
-                badgeColor: "orange",
-                title: "SoundPulse TWS ANC Pro Bluetooth 5.4",
-                originalPrice: "Rp 499.000",
-                promoPrice: "Rp 189.000",
-                discount: "-62%",
-                usp: "Peredam Bising Aktif 45dB & Baterai Tahan 36 Jam Nonstop",
-                themeColor: "#f97316",
-                accentColor: "#fbbf24",
-                images: [
-                    "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=600&q=80",
-                    "https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?auto=format&fit=crop&w=600&q=80",
-                    "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?auto=format&fit=crop&w=600&q=80"
-                ]
-            },
-            tokopedia: {
-                url: "https://www.tokopedia.com/lumina-official/lumina-glow-vitamin-c-15-brightening-serum-20ml",
-                platform: "Tokopedia Official",
-                badgeColor: "emerald",
-                title: "Lumina Glow 15% Vitamin C Brightening Serum",
-                originalPrice: "Rp 245.000",
-                promoPrice: "Rp 99.000",
-                discount: "-59%",
-                usp: "Wajah Cerah Glass Skin dalam 7 Hari & Pudarkan Noda Hitam",
-                themeColor: "#10b981",
-                accentColor: "#34d399",
-                images: [
-                    "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80",
-                    "https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?auto=format&fit=crop&w=600&q=80",
-                    "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&w=600&q=80"
-                ]
-            },
-            tiktok: {
-                url: "https://shop.tiktok.com/view/product/1729481294812-HydroBlend-Portable-Juicer-USB-C",
-                platform: "TikTok Shop Viral",
-                badgeColor: "pink",
-                title: "HydroBlend Mini Portable Juicer 6 Mata Pisau",
-                originalPrice: "Rp 320.000",
-                promoPrice: "Rp 129.000",
-                discount: "-60%",
-                usp: "Hancurkan Es Batu 10 Detik, Praktis Bawa ke Kantor & Gym",
-                themeColor: "#ec4899",
-                accentColor: "#f472b6",
-                images: [
-                    "https://images.unsplash.com/photo-1570222094114-d054a817e56b?auto=format&fit=crop&w=600&q=80",
-                    "https://images.unsplash.com/photo-1622597467836-f3285f2131b8?auto=format&fit=crop&w=600&q=80",
-                    "https://images.unsplash.com/photo-1589733955941-5eeaf752f6dd?auto=format&fit=crop&w=600&q=80"
-                ]
+        <!-- Smartphone Mockup -->
+        <div class="phone-frame relative w-[300px] h-[533px] rounded-[36px] overflow-hidden bg-slate-950">
+          <canvas id="videoCanvas" width="540" height="960" class="w-full h-full object-cover"></canvas>
+        </div>
+
+        <!-- Video Playback & Export Controls -->
+        <div class="w-full max-w-[320px] mt-5 space-y-2.5">
+          <div class="grid grid-cols-2 gap-2.5">
+            <button type="button" id="playBtn" onclick="startVideoAndVoice()" class="gradient-btn text-white font-bold text-xs py-3 px-4 rounded-xl flex items-center justify-center gap-1.5 cursor-pointer">
+              <span>▶ Putar Video + VO</span>
+            </button>
+            <button type="button" onclick="stopVideoAndVoice()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs py-3 px-4 rounded-xl border border-slate-700 transition cursor-pointer">
+              ⏹ Berhenti
+            </button>
+          </div>
+          <button type="button" id="exportBtn" onclick="exportWebMVideo()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-3 px-4 rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50 cursor-pointer">
+            <span>⬇ Download Video (.WebM)</span>
+          </button>
+          <p class="text-[11px] text-center text-slate-500">
+            Gunakan Google Chrome untuk hasil suara Bahasa Indonesia & ekspor video terbaik.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // ==========================================
+    // 1. DATABASE PRESET PRODUK SIAP PAKAI
+    // ==========================================
+    const productPresets = {
+      skincare: {
+        url: "https://shopee.co.id/Serum-Niacinamide-10-Glowing-Booster-i.123456",
+        title: "Serum Niacinamide 10% Glowing Booster",
+        originalPrice: "Rp 189.000",
+        promoPrice: "Rp 79.000",
+        discount: "DISKON 58%",
+        image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80",
+        benefit: "Mencerahkan wajah kusam dalam 7 hari, melembapkan kulit, dan aman untuk semua jenis kulit."
+      },
+      gadget: {
+        url: "https://www.tokopedia.com/audioofficial/tws-bluetooth-5-3-anc",
+        title: "TWS Bluetooth 5.3 Pro Noise Cancelling",
+        originalPrice: "Rp 450.000",
+        promoPrice: "Rp 149.000",
+        discount: "HEMAT 67%",
+        image: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=600&q=80",
+        benefit: "Suara bass menggelegar, baterai tahan hingga 30 jam, dan tahan percikan air IPX5."
+      },
+      fashion: {
+        url: "https://shop.tiktok.com/view/product/sneakers-running-ultra-ringan",
+        title: "Sneakers Running Ultra Ringan Breathable",
+        originalPrice: "Rp 399.000",
+        promoPrice: "Rp 165.000",
+        discount: "FLASH SALE",
+        image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80",
+        benefit: "Sol empuk anti slip, bahan sirkulasi udara sejuk di kaki, cocok untuk olahraga maupun hangout."
+      },
+      home: {
+        url: "https://shopee.co.id/Mini-Juicer-Blender-Portable-USB-Rechargeable",
+        title: "Mini Juicer Blender Portable 6 Mata Pisau",
+        originalPrice: "Rp 220.000",
+        promoPrice: "Rp 85.000",
+        discount: "PROMO HARI INI",
+        image: "https://images.unsplash.com/photo-1570222094114-d054a817e56b?auto=format&fit=crop&w=600&q=80",
+        benefit: "Bisa menghancurkan es batu dalam 10 detik, praktis dibawa ke kantor atau gym dengan cas USB."
+      }
+    };
+
+    // Fungsi Menerapkan Preset ke Form
+    function applyPreset(category) {
+      const data = productPresets[category];
+      if (!data) return;
+
+      document.getElementById('productUrl').value = data.url;
+      document.getElementById('productTitle').value = data.title;
+      document.getElementById('originalPrice').value = data.originalPrice;
+      document.getElementById('promoPrice').value = data.promoPrice;
+      document.getElementById('discountBadge').value = data.discount;
+      document.getElementById('productImage').value = data.image;
+      document.getElementById('productBenefit').value = data.benefit;
+
+      loadProductImage(data.image);
+      syncAndGenerateScript();
+    }
+
+    // ==========================================
+    // 2. COPYWRITING ENGINE (AIDA & PAS)
+    // ==========================================
+    function syncAndGenerateScript() {
+      const title = document.getElementById('productTitle').value.trim();
+      const origPrice = document.getElementById('originalPrice').value.trim();
+      const promoPrice = document.getElementById('promoPrice').value.trim();
+      const benefit = document.getElementById('productBenefit').value.trim();
+      const framework = document.getElementById('copyFramework').value;
+      const tone = document.getElementById('copyTone').value;
+
+      let hook = "";
+      let body = "";
+      let cta = "";
+
+      if (framework === "AIDA") {
+        if (tone === "genz") {
+          hook = `Stop scroll dulu! Kamu wajib tahu soal ${title} yang lagi viral ini.`;
+          body = `${benefit} Bayangin, dari harga ${origPrice}, sekarang cuma ${promoPrice} aja!`;
+          cta = `Buruan klik keranjang sekarang sebelum stok promo habis!`;
+        } else if (tone === "urgency") {
+          hook = `Perhatian! Promo terbatas untuk ${title} segera berakhir hari ini!`;
+          body = `${benefit} Dapatkan harga spesial ${promoPrice} dari harga normal ${origPrice}.`;
+          cta = `Jangan sampai kehabisan, amankan pesananmu sekarang juga!`;
+        } else {
+          hook = `Tingkatkan kualitas harimu dengan ${title}.`;
+          body = `Dirancang khusus untuk memberikan hasil maksimal: ${benefit} Tersedia dengan penawaran spesial ${promoPrice}.`;
+          cta = `Pesan sekarang dan rasakan langsung manfaatnya.`;
+        }
+      } else {
+        // Framework PAS (Problem - Agitate - Solution)
+        if (tone === "genz") {
+          hook = `Sering kesel sama masalah yang bikin aktivitasmu terganggu?`;
+          body = `Tenang, ${title} solusinya! ${benefit} Lagi diskon gede dari ${origPrice} jadi cuma ${promoPrice}!`;
+          cta = `Langsung checkout sekarang mumpung masih promo!`;
+        } else if (tone === "urgency") {
+          hook = `Jangan biarkan masalah lama terus menghambatmu!`;
+          body = `Saatnya beralih ke ${title}. ${benefit} Khusus hari ini cuma ${promoPrice} dari ${origPrice}.`;
+          cta = `Klik tombol beli sekarang sebelum harga kembali normal!`;
+        } else {
+          hook = `Mencari solusi praktis dan terpercaya untuk kebutuhanmu?`;
+          body = `${title} hadir sebagai jawaban tepat. ${benefit} Dapatkan penawaran terbaik di harga ${promoPrice}.`;
+          cta = `Klik tautan produk untuk pemesanan resmi.`;
+        }
+      }
+
+      document.getElementById('voiceScript').value = `${hook} ${body} ${cta}`;
+      renderSingleFrame();
+    }
+
+    // ==========================================
+    // 3. SMART LINK PARSER & 1-CLICK ACTION
+    // ==========================================
+    function handleOneClickGenerate() {
+      const urlInput = document.getElementById('productUrl').value.trim();
+      if (!urlInput) {
+        alert("Masukkan link produk atau klik salah satu tombol preset cepat.");
+        return;
+      }
+
+      // Cek apakah URL cocok dengan salah satu preset
+      const lowerUrl = urlInput.toLowerCase();
+      if (lowerUrl.includes("serum") || lowerUrl.includes("skincare")) {
+        applyPreset('skincare');
+      } else if (lowerUrl.includes("tws") || lowerUrl.includes("audio") || lowerUrl.includes("bluetooth")) {
+        applyPreset('gadget');
+      } else if (lowerUrl.includes("sneakers") || lowerUrl.includes("sepatu")) {
+        applyPreset('fashion');
+      } else if (lowerUrl.includes("blender") || lowerUrl.includes("juicer")) {
+        applyPreset('home');
+      } else {
+        // Ekstrak slug nama produk dari URL e-commerce jika memungkinkan
+        try {
+          const urlObj = new URL(urlInput);
+          const segments = urlObj.pathname.split('/').filter(Boolean);
+          if (segments.length > 0) {
+            let rawSlug = segments[segments.length - 1];
+            rawSlug = rawSlug.replace(/-i\.\d+\.\d+.*$/, '').replace(/[-_]+/g, ' ');
+            if (rawSlug.length > 4) {
+              const formattedTitle = rawSlug.replace(/\b\w/g, l => l.toUpperCase());
+              document.getElementById('productTitle').value = formattedTitle;
             }
+          }
+        } catch (e) {}
+        syncAndGenerateScript();
+      }
+
+      startVideoAndVoice();
+    }
+
+    // ==========================================
+    // 4. CANVAS VIDEO ENGINE (9:16 VERTICAL)
+    // ==========================================
+    const canvas = document.getElementById('videoCanvas');
+    const ctx = canvas.getContext('2d');
+    let productImg = new Image();
+    productImg.crossOrigin = "anonymous";
+    let isImageLoaded = false;
+
+    let animationId = null;
+    let isPlaying = false;
+    let startTime = 0;
+
+    function loadProductImage(url) {
+      isImageLoaded = false;
+      productImg = new Image();
+      productImg.crossOrigin = "anonymous";
+      productImg.onload = () => {
+        isImageLoaded = true;
+        if (!isPlaying) renderSingleFrame();
+      };
+      productImg.onerror = () => {
+        isImageLoaded = false;
+        if (!isPlaying) renderSingleFrame();
+      };
+      productImg.src = url;
+    }
+
+    function wrapText(context, text, x, y, maxWidth, lineHeight, maxLines = 3) {
+      const words = text.split(' ');
+      let line = '';
+      let lines = [];
+
+      for (let n = 0; n < words.length; n++) {
+        const testLine = line + words[n] + ' ';
+        const metrics = context.measureText(testLine);
+        if (metrics.width > maxWidth && n > 0) {
+          lines.push(line.trim());
+          line = words[n] + ' ';
+        } else {
+          line = testLine;
+        }
+      }
+      lines.push(line.trim());
+
+      lines.slice(0, maxLines).forEach((l, idx) => {
+        context.fillText(l, x, y + (idx * lineHeight));
+      });
+    }
+
+    function drawFrame(elapsedMs) {
+      const W = canvas.width;
+      const H = canvas.height;
+      const t = elapsedMs / 1000;
+
+      // 1. Background Gradient Dinamis
+      const bgGrad = ctx.createLinearGradient(0, 0, W, H);
+      bgGrad.addColorStop(0, '#0f172a');
+      bgGrad.addColorStop(0.5, '#1e1b4b');
+      bgGrad.addColorStop(1, '#090d16');
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, W, H);
+
+      // Decorative Glow Circle
+      const pulse = Math.sin(t * 3) * 15;
+      const radGrad = ctx.createRadialGradient(W / 2, H * 0.36, 20, W / 2, H * 0.36, 260 + pulse);
+      radGrad.addColorStop(0, 'rgba(236, 72, 153, 0.28)');
+      radGrad.addColorStop(1, 'rgba(15, 23, 42, 0)');
+      ctx.fillStyle = radGrad;
+      ctx.fillRect(0, 0, W, H);
+
+      // 2. Top Header Tag
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+      ctx.beginPath();
+      ctx.roundRect(40, 48, 220, 38, 19);
+      ctx.fill();
+      ctx.fillStyle = '#f472b6';
+      ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('🔥 REKOMENDASI VIRAL', 58, 73);
+
+      // 3. Product Card Container dengan Ken Burns Zoom
+      const cardX = 45;
+      const cardY = 115;
+      const cardW = W - 90;
+      const cardH = 430;
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.roundRect(cardX, cardY, cardW, cardH, 28);
+      ctx.clip();
+
+      ctx.fillStyle = '#1e293b';
+      ctx.fillRect(cardX, cardY, cardW, cardH);
+
+      if (isImageLoaded) {
+        const zoom = 1 + (Math.sin(t * 1.2) * 0.05 + 0.05);
+        const imgAspect = productImg.width / productImg.height;
+        const cardAspect = cardW / cardH;
+        let drawW, drawH;
+
+        if (imgAspect > cardAspect) {
+          drawH = cardH * zoom;
+          drawW = drawH * imgAspect;
+        } else {
+          drawW = cardW * zoom;
+          drawH = drawW / imgAspect;
+        }
+        const offsetX = cardX + (cardW - drawW) / 2;
+        const offsetY = cardY + (cardH - drawH) / 2;
+        ctx.drawImage(productImg, offsetX, offsetY, drawW, drawH);
+      } else {
+        ctx.fillStyle = '#64748b';
+        ctx.font = '600 22px "Plus Jakarta Sans", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Memuat Gambar Produk...', W / 2, cardY + cardH / 2);
+        ctx.textAlign = 'left';
+      }
+      ctx.restore();
+
+      // Border Card
+      ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.roundRect(cardX, cardY, cardW, cardH, 28);
+      ctx.stroke();
+
+      // 4. Discount Badge Berdenyut
+      const badgeText = document.getElementById('discountBadge').value || 'PROMO';
+      const badgeScale = 1 + Math.sin(t * 6) * 0.04;
+      ctx.save();
+      ctx.translate(W - 125, 135);
+      ctx.scale(badgeScale, badgeScale);
+      ctx.fillStyle = '#ef4444';
+      ctx.beginPath();
+      ctx.roundRect(-85, -26, 170, 52, 16);
+      ctx.fill();
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '800 21px "Plus Jakarta Sans", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(badgeText.toUpperCase(), 0, 8);
+      ctx.restore();
+      ctx.textAlign = 'left';
+
+      // 5. Product Title & Price Box
+      const title = document.getElementById('productTitle').value || 'Nama Produk';
+      const origPrice = document.getElementById('originalPrice').value || '';
+      const promoPrice = document.getElementById('promoPrice').value || '';
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '800 30px "Plus Jakarta Sans", sans-serif';
+      wrapText(ctx, title, 45, 595, W - 90, 38, 2);
+
+      // Harga Coret
+      if (origPrice) {
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '600 24px "Plus Jakarta Sans", sans-serif';
+        ctx.fillText(origPrice, 45, 682);
+        const textW = ctx.measureText(origPrice).width;
+        ctx.strokeStyle = '#ef4444';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(45, 674);
+        ctx.lineTo(45 + textW, 674);
+        ctx.stroke();
+      }
+
+      // Harga Promo
+      ctx.fillStyle = '#34d399';
+      ctx.font = '800 44px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText(promoPrice, 45, 735);
+
+      // 6. Dynamic Subtitle Box (Sinkron dengan Naskah)
+      const fullScript = document.getElementById('voiceScript').value.trim();
+      const sentences = fullScript.split(/(?<=[.!?])\s+/).filter(Boolean);
+      const currentSentenceIdx = sentences.length > 0 ? Math.floor(t / 3.5) % sentences.length : 0;
+      const activeSubtitle = sentences[currentSentenceIdx] || fullScript;
+
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.88)';
+      ctx.beginPath();
+      ctx.roundRect(40, 765, W - 80, 105, 18);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(99, 102, 241, 0.5)';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      ctx.fillStyle = '#f8fafc';
+      ctx.font = '600 20px "Plus Jakarta Sans", sans-serif';
+      wrapText(ctx, `"${activeSubtitle}"`, 60, 802, W - 120, 28, 3);
+
+      // 7. Bottom CTA Bar & Audio Waveform
+      const ctaGrad = ctx.createLinearGradient(40, 888, W - 40, 888);
+      ctaGrad.addColorStop(0, '#6366f1');
+      ctaGrad.addColorStop(1, '#ec4899');
+      ctx.fillStyle = ctaGrad;
+      ctx.beginPath();
+      ctx.roundRect(40, 888, W - 80, 48, 24);
+      ctx.fill();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '800 19px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('🛒 CHECKOUT SEKARANG', 68, 919);
+
+      // Waveform Bars
+      for (let i = 0; i < 8; i++) {
+        const barH = isPlaying ? 8 + Math.abs(Math.sin(t * 10 + i)) * 20 : 8;
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(W - 145 + (i * 10), 912 - barH / 2, 5, barH);
+      }
+    }
+
+    function renderSingleFrame() {
+      drawFrame(1200);
+    }
+
+    function animateLoop(timestamp) {
+      if (!startTime) startTime = timestamp;
+      const elapsed = timestamp - startTime;
+      drawFrame(elapsed);
+      if (isPlaying) {
+        animationId = requestAnimationFrame(animateLoop);
+      }
+    }
+
+    // ==========================================
+    // 5. WEB SPEECH API (AI VOICE OVER ID)
+    // ==========================================
+    document.getElementById('voiceRate').addEventListener('input', function() {
+      document.getElementById('rateLabel').textContent = this.value + 'x';
+    });
+
+    function speakScriptOnly() {
+      if (!('speechSynthesis' in window)) {
+        alert("Browser Anda tidak mendukung fitur Web Speech API. Gunakan Google Chrome.");
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const text = document.getElementById('voiceScript').value.trim();
+      if (!text) return;
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'id-ID';
+      utterance.rate = parseFloat(document.getElementById('voiceRate').value) || 1.05;
+      utterance.pitch = 1.05;
+
+      const voices = window.speechSynthesis.getVoices();
+      const idVoice = voices.find(v => v.lang.includes('id-ID') || v.lang.includes('id_ID'));
+      if (idVoice) utterance.voice = idVoice;
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function startVideoAndVoice() {
+      stopVideoAndVoice();
+      isPlaying = true;
+      startTime = 0;
+      document.getElementById('renderStatus').textContent = '● Sedang Memutar...';
+      document.getElementById('renderStatus').className = 'text-xs font-semibold text-pink-400 animate-pulse';
+
+      animationId = requestAnimationFrame(animateLoop);
+
+      if ('speechSynthesis' in window) {
+        const text = document.getElementById('voiceScript').value.trim();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'id-ID';
+        utterance.rate = parseFloat(document.getElementById('voiceRate').value) || 1.05;
+
+        const voices = window.speechSynthesis.getVoices();
+        const idVoice = voices.find(v => v.lang.includes('id-ID') || v.lang.includes('id_ID'));
+        if (idVoice) utterance.voice = idVoice;
+
+        utterance.onend = () => {
+          stopVideoAndVoice();
         };
+        window.speechSynthesis.speak(utterance);
+      }
+    }
 
-        // --- 2. APPLICATION STATE ---
-        let state = {
-            currentProduct: JSON.parse(JSON.stringify(PRODUCT_PRESETS.shopee)),
-            loadedImages: [],
-            framework: 'AIDA',
-            tone: 'genz',
-            isPlaying: false,
-            elapsedTime: 0,
-            totalDuration: 13.5, // detik total durasi video
-            lastFrameTimestamp: null,
-            animationFrameId: null,
-            spokenScenes: { 1: false, 2: false, 3: false }
-        };
+    function stopVideoAndVoice() {
+      isPlaying = false;
+      if (animationId) cancelAnimationFrame(animationId);
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      document.getElementById('renderStatus').textContent = 'Siap Diputar';
+      document.getElementById('renderStatus').className = 'text-xs font-semibold text-indigo-400';
+      renderSingleFrame();
+    }
 
-        // --- 3. DOM ELEMENTS ---
-        const canvas = document.getElementById('videoCanvas');
-        const ctx = canvas.getContext('2d');
-        const urlInput = document.getElementById('productUrlInput');
-        const clearUrlBtn = document.getElementById('clearUrlBtn');
-        const generateBtn = document.getElementById('generateBtn');
-        const playPauseBtn = document.getElementById('playPauseBtn');
-        const canvasOverlayPlay = document.getElementById('canvasOverlayPlay');
-        const stopBtn = document.getElementById('stopBtn');
-        const exportBtn = document.getElementById('exportBtn');
+    // ==========================================
+    // 6. EXPORT VIDEO (.WebM)
+    // ==========================================
+    function exportWebMVideo() {
+      const exportBtn = document.getElementById('exportBtn');
+      exportBtn.disabled = true;
+      exportBtn.innerHTML = '<span>⏳ Merekam Video (8 Detik)...</span>';
 
-        // --- 4. INITIALIZATION & THEME ---
-        window.onload = () => {
-            setupCanvasResolution();
-            loadPreset('shopee', false);
-            setupEventListeners();
-        };
+      const stream = canvas.captureStream(30);
+      const recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+      const chunks = [];
 
-        window.addEventListener('resize', () => {
-            setupCanvasResolution();
-            if (!state.isPlaying) renderFrame(state.elapsedTime);
-        });
+      recorder.ondataavailable = e => {
+        if (e.data.size > 0) chunks.push(e.data);
+      };
 
-        function setupCanvasResolution() {
-            // Internal resolution 720x1280 (HD 9:16) agar tajam di semua layar
-            canvas.width = 720;
-            canvas.height = 1280;
+      recorder.onstop = () => {
+        const blob = new Blob(chunks, { type: 'video/webm' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'PromoAI-Video-Produk.webm';
+        a.click();
+        URL.revokeObjectURL(url);
+
+        stopVideoAndVoice();
+        exportBtn.disabled = false;
+        exportBtn.innerHTML = '<span>⬇ Download Video (.WebM)</span>';
+      };
+
+      startVideoAndVoice();
+      recorder.start();
+
+      setTimeout(() => {
+        if (recorder.state === 'recording') {
+          recorder.stop();
         }
-
-        document.getElementById('themeToggle').addEventListener('click', () => {
-            document.documentElement.classList.toggle('dark');
-        });
-
-        // --- 5. COPYWRITING ENGINE (AIDA & PAS GENERATOR) ---
-        function generateMarketingCopy() {
-            const title = document.getElementById('prodTitle').value || state.currentProduct.title;
-            const usp = document.getElementById('prodUsp').value || state.currentProduct.usp;
-            const origPrice = document.getElementById('prodOriginalPrice').value || state.currentProduct.originalPrice;
-            const promoPrice = document.getElementById('prodPromoPrice').value || state.currentProduct.promoPrice;
-            const tone = document.getElementById('toneSelector').value;
-            const fw = state.framework;
-
-            let hook = "", body = "", cta = "";
-
-            if (fw === 'AIDA') {
-                document.getElementById('labelScene1').textContent = "Scene 1: Attention / Hook (0 - 4.5 Detik)";
-                document.getElementById('labelScene2').textContent = "Scene 2: Interest & Desire (4.5 - 9.0 Detik)";
-                document.getElementById('labelScene3').textContent = "Scene 3: Action / CTA Promo (9.0 - 13.5 Detik)";
-
-                if (tone === 'genz') {
-                    hook = `Sumpah nyesel banget baru tau ada ${title} sebagus ini!`;
-                    body = `Gila sih, ${usp}. Bikin aktivitas harian kamu makin sat-set dan estetik!`;
-                    cta = `Dari ${origPrice} sekarang cuma ${promoPrice}! Klik keranjang kuning sebelum kehabisan!`;
-                } else if (tone === 'pro') {
-                    hook = `Tingkatkan kualitas hidup Anda dengan inovasi terbaru: ${title}.`;
-                    body = `Dirancang khusus dengan keunggulan ${usp} untuk performa maksimal setiap hari.`;
-                    cta = `Dapatkan penawaran eksklusif ${promoPrice} hari ini. Pesan sekarang sebelum promo berakhir.`;
-                } else {
-                    hook = `STOP SCROLL! Promo gila ${title} cuma berlaku hari ini saja!`;
-                    body = `Bayangkan punya produk dengan ${usp} tanpa harus menguras dompet kamu!`;
-                    cta = `Diskon anjlok dari ${origPrice} jadi ${promoPrice}! Checkout sekarang stok sisa sedikit!`;
-                }
-            } else {
-                // PAS Framework (Problem - Agitate - Solution)
-                document.getElementById('labelScene1').textContent = "Scene 1: Problem / Masalah (0 - 4.5 Detik)";
-                document.getElementById('labelScene2').textContent = "Scene 2: Agitate & Solution (4.5 - 9.0 Detik)";
-                document.getElementById('labelScene3').textContent = "Scene 3: Offer & Action (9.0 - 13.5 Detik)";
-
-                if (tone === 'genz') {
-                    hook = `Capek kan sama produk lama yang gampang rusak dan bikin ribet?`;
-                    body = `Jangan buang duit lagi! Pindah ke ${title} yang punya ${usp}.`;
-                    cta = `Mumpung lagi flash sale ${promoPrice} dari ${origPrice}, langsung amankan sekarang!`;
-                } else if (tone === 'pro') {
-                    hook = `Sering mengalami kendala akibat peralatan yang kurang optimal?`;
-                    body = `${title} hadir sebagai solusi cerdas berkat ${usp} yang teruji.`;
-                    cta = `Miliki sekarang dengan harga spesial ${promoPrice}. Klik tautan pembelian di bawah.`;
-                } else {
-                    hook = `Masih bertahan pakai cara lama yang buang-buang waktu dan tenaga?`;
-                    body = `Saatnya upgrade ke ${title}! Nikmati ${usp} seketika!`;
-                    cta = `Harga normal ${origPrice}, khusus detik ini cuma ${promoPrice}! Buruan serbu sekarang!`;
-                }
-            }
-
-            document.getElementById('scriptHook').value = hook;
-            document.getElementById('scriptBody').value = body;
-            document.getElementById('scriptCta').value = cta;
-
-            if (!state.isPlaying) renderFrame(state.elapsedTime);
-        }
-
-        function setFramework(fw) {
-            state.framework = fw;
-            const aidaBtn = document.getElementById('fwAidaBtn');
-            const pasBtn = document.getElementById('fwPasBtn');
-
-            if (fw === 'AIDA') {
-                aidaBtn.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-white dark:bg-slate-800 text-brand-600 dark:text-brand-400 shadow-sm transition cursor-pointer";
-                pasBtn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition cursor-pointer";
-            } else {
-                pasBtn.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-white dark:bg-slate-800 text-brand-600 dark:text-brand-400 shadow-sm transition cursor-pointer";
-                aidaBtn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition cursor-pointer";
-            }
-            generateMarketingCopy();
-        }
-
-        // --- 6. SCRAPING SIMULATION & PRESET LOADER ---
-        function loadPreset(key, autoRunPipeline = true) {
-            stopVideo();
-            const preset = PRODUCT_PRESETS[key];
-            state.currentProduct = JSON.parse(JSON.stringify(preset));
-            urlInput.value = preset.url;
-            clearUrlBtn.classList.remove('hidden');
-
-            if (autoRunPipeline) {
-                runScrapingPipeline(() => {
-                    applyProductToUI(state.currentProduct);
-                });
-            } else {
-                applyProductToUI(state.currentProduct);
-            }
-        }
-
-        function parseCustomUrl(url) {
-            stopVideo();
-            let detectedPlatform = "E-Commerce Store";
-            let themeColor = "#8b5cf6";
-            let accentColor = "#ec4899";
-
-            const lower = url.toLowerCase();
-            if (lower.includes("shopee")) {
-                detectedPlatform = "Shopee Mall";
-                themeColor = "#f97316";
-                accentColor = "#fbbf24";
-            } else if (lower.includes("tokopedia")) {
-                detectedPlatform = "Tokopedia Official";
-                themeColor = "#10b981";
-                accentColor = "#34d399";
-            } else if (lower.includes("tiktok")) {
-                detectedPlatform = "TikTok Shop";
-                themeColor = "#ec4899";
-                accentColor = "#f472b6";
-            } else if (lower.includes("amazon")) {
-                detectedPlatform = "Amazon Prime";
-                themeColor = "#eab308";
-                accentColor = "#fde047";
-            }
-
-            // Ekstrak slug judul dari URL jika memungkinkan
-            let extractedTitle = "Smart Gadget Multifungsi Edisi Terbaru 2026";
-            try {
-                const urlObj = new URL(url);
-                const pathParts = urlObj.pathname.split('/').filter(p => p.length > 3 && !p.startsWith('i.'));
-                if (pathParts.length > 0) {
-                    const rawSlug = pathParts[pathParts.length - 1].split('-i.')[0];
-                    const cleanName = rawSlug.replace(/[-_]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                    if (cleanName.length > 5) extractedTitle = cleanName.substring(0, 48);
-                }
-            } catch (e) {
-                // Fallback jika bukan URL standar
-            }
-
-            state.currentProduct = {
-                url: url,
-                platform: detectedPlatform,
-                title: extractedTitle,
-                originalPrice: "Rp 399.000",
-                promoPrice: "Rp 149.000",
-                discount: "-63%",
-                usp: "Kualitas Premium Bergaransi Resmi & Pengiriman Instan",
-                themeColor: themeColor,
-                accentColor: accentColor,
-                images: [
-                    "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80",
-                    "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80",
-                    "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=600&q=80"
-                ]
-            };
-
-            runScrapingPipeline(() => {
-                applyProductToUI(state.currentProduct);
-            });
-        }
-
-        function runScrapingPipeline(onComplete) {
-            const container = document.getElementById('pipelineContainer');
-            const bar = document.getElementById('pipelineBar');
-            const statusText = document.getElementById('pipelineStatusText');
-            const percentText = document.getElementById('pipelinePercent');
-
-            container.classList.remove('hidden');
-            generateBtn.disabled = true;
-            generateBtn.classList.add('opacity-70');
-
-            const steps = [
-                { pct: 25, text: "Menghubungkan ke server & mengambil metadata produk...", stepId: "step1" },
-                { pct: 55, text: "Mengunduh gambar HD & menghapus noise visual...", stepId: "step2" },
-                { pct: 80, text: "Meracik naskah iklan persuasif & Voice Over AI...", stepId: "step3" },
-                { pct: 100, text: "Menyusun timeline animasi video vertikal 9:16...", stepId: "step4" }
-            ];
-
-            // Reset step badges
-            ['step1', 'step2', 'step3', 'step4'].forEach(id => {
-                document.getElementById(id).className = "p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800/50 transition-colors";
-            });
-
-            let idx = 0;
-            const interval = setInterval(() => {
-                if (idx < steps.length) {
-                    const s = steps[idx];
-                    bar.style.width = s.pct + "%";
-                    percentText.textContent = s.pct + "%";
-                    statusText.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> ${s.text}`;
-                    document.getElementById(s.stepId).className = "p-1.5 rounded-lg bg-brand-500/20 text-brand-500 font-bold border border-brand-500/30";
-                    idx++;
-                } else {
-                    clearInterval(interval);
-                    statusText.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-500"></i> Video produk otomatis siap diputar!`;
-                    generateBtn.disabled = false;
-                    generateBtn.classList.remove('opacity-70');
-                    onComplete();
-                    // Otomatis putar video setelah 1x klik selesai!
-                    setTimeout(() => {
-                        playVideo();
-                    }, 400);
-                }
-            }, 380);
-        }
-
-        function applyProductToUI(prod) {
-            document.getElementById('platformBadge').textContent = prod.platform;
-            document.getElementById('prodTitle').value = prod.title;
-            document.getElementById('prodOriginalPrice').value = prod.originalPrice;
-            document.getElementById('prodPromoPrice').value = prod.promoPrice;
-            document.getElementById('prodUsp').value = prod.usp;
-            document.getElementById('discountBadge').textContent = prod.discount;
-
-            const mainImg = document.getElementById('previewMainImg');
-            mainImg.src = prod.images[0];
-            mainImg.onerror = () => { mainImg.src = "https://placehold.co/600x600/1e293b/ffffff?text=Produk+HD"; };
-
-            // Render thumbnails
-            const strip = document.getElementById('thumbnailStrip');
-            strip.innerHTML = "";
-            state.loadedImages = [];
-
-            prod.images.forEach((imgUrl, index) => {
-                // UI thumbnail
-                const thumb = document.createElement('img');
-                thumb.src = imgUrl;
-                thumb.className = "w-full aspect-square object-cover rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer hover:opacity-80 transition";
-                thumb.onerror = () => { thumb.src = `https://placehold.co/400x400/1e293b/ffffff?text=Slide+${index+1}`; };
-                thumb.onclick = () => { mainImg.src = thumb.src; };
-                strip.appendChild(thumb);
-
-                // Preload Image object for HTML5 Canvas
-                const canvasImg = new Image();
-                canvasImg.crossOrigin = "anonymous";
-                canvasImg.src = imgUrl;
-                canvasImg.onload = () => {
-                    if (!state.isPlaying) renderFrame(state.elapsedTime);
-                };
-                canvasImg.onerror = () => {
-                    // Fallback jika CORS memblokir gambar eksternal
-                    const fallbackImg = new Image();
-                    fallbackImg.src = `https://placehold.co/720x900/1e1b4b/ffffff?text=${encodeURIComponent(prod.title.substring(0, 18))}`;
-                    fallbackImg.onload = () => {
-                        state.loadedImages[index] = fallbackImg;
-                        if (!state.isPlaying) renderFrame(state.elapsedTime);
-                    };
-                };
-                state.loadedImages[index] = canvasImg;
-            });
-
-            generateMarketingCopy();
-            renderFrame(0);
-        }
-
-        // --- 7. TEXT-TO-SPEECH (WEB SPEECH API VOICE OVER) ---
-        function speakText(text) {
-            if (!document.getElementById('voToggle').checked) return;
-            if (!('speechSynthesis' in window)) return;
-
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'id-ID';
-            utterance.rate = parseFloat(document.getElementById('voiceRate').value) || 1.1;
-            utterance.pitch = 1.05;
-
-            // Cari suara Bahasa Indonesia terbaik jika tersedia di browser
-            const voices = window.speechSynthesis.getVoices();
-            const idVoice = voices.find(v => v.lang.includes('id-ID') || v.lang.includes('id_ID'));
-            if (idVoice) utterance.voice = idVoice;
-
-            window.speechSynthesis.speak(utterance);
-        }
-
-        // --- 8. HTML5 CANVAS VIDEO RENDERING ENGINE (9:16) ---
-        function renderFrame(t) {
-            const W = canvas.width;
-            const H = canvas.height;
-            const prod = state.currentProduct;
-
-            // Tentukan Scene aktif (0-4.5s, 4.5-9.0s, 9.0-13.5s)
-            let sceneIndex = 0;
-            let sceneLocalTime = t;
-            if (t >= 4.5 && t < 9.0) {
-                sceneIndex = 1;
-                sceneLocalTime = t - 4.5;
-            } else if (t >= 9.0) {
-                sceneIndex = 2;
-                sceneLocalTime = t - 9.0;
-            }
-
-            // Trigger Voice Over saat memasuki scene baru saat sedang play
-            if (state.isPlaying && !state.spokenScenes[sceneIndex + 1]) {
-                state.spokenScenes[sceneIndex + 1] = true;
-                const scripts = [
-                    document.getElementById('scriptHook').value,
-                    document.getElementById('scriptBody').value,
-                    document.getElementById('scriptCta').value
-                ];
-                speakText(scripts[sceneIndex]);
-            }
-
-            // 1. Background Gradient Dinamis
-            const bgGrad = ctx.createLinearGradient(0, 0, W, H);
-            bgGrad.addColorStop(0, '#090d16');
-            bgGrad.addColorStop(0.5, '#131b2e');
-            bgGrad.addColorStop(1, '#090d16');
-            ctx.fillStyle = bgGrad;
-            ctx.fillRect(0, 0, W, H);
-
-            // Ambient Glow Circle di belakang produk
-            const glowGrad = ctx.createRadialGradient(W / 2, H * 0.42, 40, W / 2, H * 0.42, 420);
-            glowGrad.addColorStop(0, prod.themeColor + '55');
-            glowGrad.addColorStop(1, 'transparent');
-            ctx.fillStyle = glowGrad;
-            ctx.fillRect(0, 0, W, H);
-
-            // 2. Render Gambar Produk dengan Animasi Ken Burns (Zoom & Pan halus)
-            const activeImg = state.loadedImages[sceneIndex] || state.loadedImages[0];
-            if (activeImg && activeImg.complete && activeImg.naturalWidth > 0) {
-                ctx.save();
-                // Card container untuk foto produk
-                const cardX = 60;
-                const cardY = 175;
-                const cardW = W - 120;
-                const cardH = 620;
-                const radius = 36;
-
-                roundRectPath(ctx, cardX, cardY, cardW, cardH, radius);
-                ctx.clip();
-
-                // Efek Zoom perlahan
-                const zoomScale = 1.0 + (sceneLocalTime / 4.5) * 0.14;
-                const imgAspect = activeImg.naturalWidth / activeImg.naturalHeight;
-                const boxAspect = cardW / cardH;
-
-                let drawW, drawH;
-                if (imgAspect > boxAspect) {
-                    drawH = cardH * zoomScale;
-                    drawW = drawH * imgAspect;
-                } else {
-                    drawW = cardW * zoomScale;
-                    drawH = drawW / imgAspect;
-                }
-
-                const drawX = cardX + (cardW - drawW) / 2;
-                const drawY = cardY + (cardH - drawH) / 2;
-                ctx.drawImage(activeImg, drawX, drawY, drawW, drawH);
-
-                // Vignette bawah pada foto agar teks terbaca jelas
-                const imgOverlay = ctx.createLinearGradient(0, cardY + cardH * 0.5, 0, cardY + cardH);
-                imgOverlay.addColorStop(0, 'transparent');
-                imgOverlay.addColorStop(1, 'rgba(9, 13, 22, 0.85)');
-                ctx.fillStyle = imgOverlay;
-                ctx.fillRect(cardX, cardY, cardW, cardH);
-
-                ctx.restore();
-
-                // Border tipis bercahaya di sekitar card foto
-                ctx.strokeStyle = 'rgba(255,255,255,0.18)';
-                ctx.lineWidth = 3;
-                roundRectPath(ctx, cardX, cardY, cardW, cardH, radius);
-                ctx.stroke();
-            }
-
-            // 3. Top Header Badges (Platform & Diskon)
-            // Platform Pill
-            ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
-            roundRectPath(ctx, 60, 95, 250, 52, 26);
-            ctx.fill();
-            ctx.strokeStyle = prod.themeColor;
-            ctx.lineWidth = 2;
-            ctx.stroke();
-
-            ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 22px Inter, sans-serif';
-            ctx.textAlign = 'left';
-            ctx.fillText("🛍️ " + prod.platform, 82, 128);
-
-            // Discount Starburst / Pill di pojok kanan atas foto
-            const pulse = 1 + Math.sin(t * 8) * 0.04;
-            ctx.save();
-            ctx.translate(W - 125, 210);
-            ctx.scale(pulse, pulse);
-            ctx.fillStyle = '#e11d48';
-            roundRectPath(ctx, -75, -32, 150, 64, 20);
-            ctx.fill();
-            ctx.fillStyle = '#ffffff';
-            ctx.font = '800 28px Inter, sans-serif';
-            ctx.textAlign = 'center';
-            ctx.fillText("DISKON " + prod.discount.replace('-', ''), 0, 10);
-            ctx.restore();
-
-            // 4. Judul Produk & Harga Promo Bar
-            const currentTitle = document.getElementById('prodTitle').value || prod.title;
-            const origPrice = document.getElementById('prodOriginalPrice').value || prod.originalPrice;
-            const promoPrice = document.getElementById('prodPromoPrice').value || prod.promoPrice;
-
-            ctx.fillStyle = '#f8fafc';
-            ctx.font = '800 32px Inter, sans-serif';
-            ctx.textAlign = 'center';
-            const titleLines = wrapText(ctx, currentTitle, W - 140);
-            titleLines.slice(0, 2).forEach((line, i) => {
-                ctx.fillText(line, W / 2, 715 + i * 40);
-            });
-
-            // 5. Subtitle Box Dinamis (Hook / Body / CTA)
-            const scripts = [
-                document.getElementById('scriptHook').value,
-                document.getElementById('scriptBody').value,
-                document.getElementById('scriptCta').value
-            ];
-            const activeScript = scripts[sceneIndex];
-
-            // Kotak Subtitle modern di bagian bawah
-            const subBoxY = 835;
-            ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
-            roundRectPath(ctx, 50, subBoxY, W - 100, 195, 28);
-            ctx.fill();
-            ctx.strokeStyle = prod.themeColor + '88';
-            ctx.lineWidth = 2;
-            ctx.stroke();
-
-            // Label Scene kecil
-            const sceneBadges = ["🔥 HOOK VIRAL", "✨ KEUNGGULAN PRODUK", "⚡ PROMO TERBATAS"];
-            ctx.fillStyle = prod.accentColor;
-            ctx.font = '800 20px Inter, sans-serif';
-            ctx.textAlign = 'center';
-            ctx.fillText(sceneBadges[sceneIndex], W / 2, subBoxY + 40);
-
-            // Teks Naskah Subtitle (Word Wrap)
-            ctx.fillStyle = '#ffffff';
-            ctx.font = '700 28px Inter, sans-serif';
-            const subLines = wrapText(ctx, `"${activeScript}"`, W - 150);
-            subLines.slice(0, 3).forEach((line, idx) => {
-                ctx.fillText(line, W / 2, subBoxY + 86 + idx * 38);
-            });
-
-            // 6. Call-To-Action Price Banner di Bagian Paling Bawah
-            const ctaY = 1065;
-            const ctaGrad = ctx.createLinearGradient(50, ctaY, W - 50, ctaY + 115);
-            ctaGrad.addColorStop(0, prod.themeColor);
-            ctaGrad.addColorStop(1, '#db2777');
-            ctx.fillStyle = ctaGrad;
-            roundRectPath(ctx, 50, ctaY, W - 100, 115, 28);
-            ctx.fill();
-
-            // Harga Coret & Harga Promo
-            ctx.fillStyle = 'rgba(255,255,255,0.8)';
-            ctx.font = '600 22px Inter, sans-serif';
-            ctx.textAlign = 'left';
-            ctx.fillText("Normal: " + origPrice, 85, ctaY + 42);
-
-            ctx.fillStyle = '#ffffff';
-            ctx.font = '900 40px Inter, sans-serif';
-            ctx.fillText(promoPrice, 85, ctaY + 90);
-
-            // Tombol CTA kanan
-            ctx.fillStyle = '#ffffff';
-            roundRectPath(ctx, W - 275, ctaY + 24, 195, 66, 20);
-            ctx.fill();
-
-            ctx.fillStyle = '#0f172a';
-            ctx.font = '800 23px Inter, sans-serif';
-            ctx.textAlign = 'center';
-            ctx.fillText("BELI SEKARANG", W - 177, ctaY + 65);
-
-            // 7. Audio Waveform Visualizer (Indikator Voice Over Aktif)
-            if (state.isPlaying) {
-                const barCount = 14;
-                const startX = W / 2 - (barCount * 10) / 2;
-                for (let i = 0; i < barCount; i++) {
-                    const barH = 10 + Math.abs(Math.sin(t * 14 + i * 0.8)) * 24;
-                    ctx.fillStyle = prod.accentColor;
-                    roundRectPath(ctx, startX + i * 10, 1225 - barH / 2, 5, barH, 3);
-                    ctx.fill();
-                }
-            }
-        }
-
-        // Helper: Rounded Rectangle Path
-        function roundRectPath(ctx, x, y, width, height, radius) {
-            ctx.beginPath();
-            ctx.moveTo(x + radius, y);
-            ctx.lineTo(x + width - radius, y);
-            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-            ctx.lineTo(x + width, y + height - radius);
-            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-            ctx.lineTo(x + radius, y + height);
-            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-            ctx.lineTo(x, y + radius);
-            ctx.quadraticCurveTo(x, y, x + radius, y);
-            ctx.closePath();
-        }
-
-        // Helper: Wrap Text pada Canvas
-        function wrapText(ctx, text, maxWidth) {
-            const words = text.split(' ');
-            const lines = [];
-            let currentLine = words[0] || '';
-
-            for (let i = 1; i < words.length; i++) {
-                const word = words[i];
-                const width = ctx.measureText(currentLine + " " + word).width;
-                if (width < maxWidth) {
-                    currentLine += " " + word;
-                } else {
-                    lines.push(currentLine);
-                    currentLine = word;
-                }
-            }
-            lines.push(currentLine);
-            return lines;
-        }
-
-        // --- 9. VIDEO PLAYBACK LOOP & TIMELINE CONTROLS ---
-        function playVideo() {
-            if (state.isPlaying) return;
-
-            if (state.elapsedTime >= state.totalDuration) {
-                state.elapsedTime = 0;
-                state.spokenScenes = { 1: false, 2: false, 3: false };
-            }
-
-            state.isPlaying = true;
-            state.lastFrameTimestamp = performance.now();
-            canvasOverlayPlay.classList.add('hidden');
-            document.getElementById('playIcon').className = "fa-solid fa-pause";
-            document.getElementById('playBtnText').textContent = "Jeda Video";
-
-            function loop(now) {
-                if (!state.isPlaying) return;
-                const dt = (now - state.lastFrameTimestamp) / 1000;
-                state.lastFrameTimestamp = now;
-                state.elapsedTime += dt;
-
-                if (state.elapsedTime >= state.totalDuration) {
-                    state.elapsedTime = state.totalDuration;
-                    renderFrame(state.elapsedTime);
-                    updateTimelineUI();
-                    pauseVideo(true);
-                    return;
-                }
-
-                renderFrame(state.elapsedTime);
-                updateTimelineUI();
-                state.animationFrameId = requestAnimationFrame(loop);
-            }
-
-            state.animationFrameId = requestAnimationFrame(loop);
-        }
-
-        function pauseVideo(ended = false) {
-            state.isPlaying = false;
-            if (state.animationFrameId) cancelAnimationFrame(state.animationFrameId);
-            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-
-            canvasOverlayPlay.classList.remove('hidden');
-            document.getElementById('playIcon').className = "fa-solid fa-play";
-            document.getElementById('playBtnText').textContent = ended ? "Putar Ulang" : "Lanjutkan";
-
-            if (ended) {
-                state.spokenScenes = { 1: false, 2: false, 3: false };
-            }
-        }
-
-        function stopVideo() {
-            pauseVideo(false);
-            state.elapsedTime = 0;
-            state.spokenScenes = { 1: false, 2: false, 3: false };
-            document.getElementById('playBtnText').textContent = "Putar + Voice Over";
-            updateTimelineUI();
-            renderFrame(0);
-        }
-
-        function updateTimelineUI() {
-            const pct = Math.min(100, (state.elapsedTime / state.totalDuration) * 100);
-            document.getElementById('videoProgressBar').style.width = pct + "%";
-
-            const curSec = Math.floor(state.elapsedTime).toString().padStart(2, '0');
-            const totSec = Math.floor(state.totalDuration).toString().padStart(2, '0');
-            document.getElementById('timerDisplay').textContent = `00:${curSec} / 00:${totSec}`;
-        }
-
-        // --- 10. EVENT LISTENERS & EXPORT SIMULATION ---
-        function setupEventListeners() {
-            // Generate 1-Click Button
-            generateBtn.addEventListener('click', () => {
-                const rawUrl = urlInput.value.trim();
-                if (!rawUrl) {
-                    // Jika kosong, otomatis isi contoh Shopee agar 1-klik tetap berjalan mulus
-                    loadPreset('shopee', true);
-                    return;
-                }
-                parseCustomUrl(rawUrl);
-            });
-
-            // Input Clear Button
-            urlInput.addEventListener('input', () => {
-                if (urlInput.value.trim().length > 0) {
-                    clearUrlBtn.classList.remove('hidden');
-                } else {
-                    clearUrlBtn.classList.add('hidden');
-                }
-            });
-
-            clearUrlBtn.addEventListener('click', () => {
-                urlInput.value = "";
-                clearUrlBtn.classList.add('hidden');
-                urlInput.focus();
-            });
-
-            // Play / Pause Buttons
-            playPauseBtn.addEventListener('click', () => {
-                if (state.isPlaying) pauseVideo(false);
-                else playVideo();
-            });
-
-            canvasOverlayPlay.addEventListener('click', () => {
-                playVideo();
-            });
-
-            stopBtn.addEventListener('click', stopVideo);
-
-            // Scrubber click
-            document.getElementById('videoProgressContainer').addEventListener('click', (e) => {
-                const rect = e.currentTarget.getBoundingClientRect();
-                const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-                state.elapsedTime = ratio * state.totalDuration;
-                state.spokenScenes = { 1: false, 2: false, 3: false };
-                updateTimelineUI();
-                renderFrame(state.elapsedTime);
-            });
-
-            // Live update saat pengguna mengedit data produk atau naskah
-            ['prodTitle', 'prodOriginalPrice', 'prodPromoPrice', 'prodUsp'].forEach(id => {
-                document.getElementById(id).addEventListener('input', () => {
-                    generateMarketingCopy();
-                });
-            });
-
-            ['scriptHook', 'scriptBody', 'scriptCta'].forEach(id => {
-                document.getElementById(id).addEventListener('input', () => {
-                    if (!state.isPlaying) renderFrame(state.elapsedTime);
-                });
-            });
-
-            document.getElementById('toneSelector').addEventListener('change', generateMarketingCopy);
-
-            // Export Video Simulation + Snapshot Download
-            exportBtn.addEventListener('click', () => {
-                pauseVideo(false);
-                const modal = document.getElementById('customModal');
-                const modalTitle = document.getElementById('modalTitle');
-                const modalMessage = document.getElementById('modalMessage');
-                const progressWrap = document.getElementById('modalProgressWrapper');
-                const progressBar = document.getElementById('modalProgressBar');
-                const progressLabel = document.getElementById('modalProgressLabel');
-                const closeBtn = document.getElementById('closeModalBtn');
-
-                modal.classList.remove('hidden');
-                progressWrap.classList.remove('hidden');
-                closeBtn.disabled = true;
-                closeBtn.classList.add('opacity-50');
-
-                modalTitle.textContent = "Merender Video Iklan HD...";
-                modalMessage.textContent = "Menggabungkan animasi frame 9:16, subtitle dinamis, dan trek Voice Over AI Bahasa Indonesia...";
-
-                let p = 0;
-                const renderTimer = setInterval(() => {
-                    p += 10;
-                    progressBar.style.width = p + "%";
-                    progressLabel.textContent = p + "%";
-
-                    if (p >= 100) {
-                        clearInterval(renderTimer);
-                        modalTitle.textContent = "Render Selesai & Siap Posting!";
-                        modalMessage.textContent = "Poster Cover HD iklan produk Anda telah diunduh otomatis. Video siap diunggah ke TikTok, Instagram Reels, atau Shopee Video!";
-                        closeBtn.disabled = false;
-                        closeBtn.classList.remove('opacity-50');
-
-                        // Unduh frame poster HD dari Canvas sebagai bukti hasil render nyata
-                        try {
-                            renderFrame(9.5); // Render frame CTA promo terbaik
-                            const link = document.createElement('a');
-                            link.download = `PromoAI-VideoAd-${Date.now()}.png`;
-                            link.href = canvas.toDataURL('image/png');
-                            link.click();
-                        } catch (err) {
-                            // Abaikan jika gambar eksternal membatasi toDataURL
-                        }
-                    }
-                }, 220);
-            });
-
-            document.getElementById('closeModalBtn').addEventListener('click', () => {
-                document.getElementById('customModal').classList.add('hidden');
-            });
-        }
-    </script>
+      }, 8000);
+    }
+
+    // Inisialisasi Awal Saat Halaman Dimuat
+    window.addEventListener('DOMContentLoaded', () => {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.getVoices();
+      }
+      loadProductImage(document.getElementById('productImage').value);
+      syncAndGenerateScript();
+    });
+  </script>
 </body>
 </html>
